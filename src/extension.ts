@@ -60,6 +60,39 @@ export async function installDocformatter(): Promise<void> {
 	}
 }
 
+export async function alertFormattingError(
+	err: FormatException
+): Promise<void> {
+	if (
+		err.message.includes("Package JuliaFormatter not found")
+	) {
+		const installButton = "Install Module";
+		const response = await vscode.window.showErrorMessage(
+			`The Julia package 'JuliaFormatter' must be installed to format
+			docstrings.`,
+			installButton
+		);
+		if (response === installButton) {
+			installDocformatter();
+		}
+	} else {
+		const bugReportButton = "Submit Bug Report";
+		const response = await vscode.window.showErrorMessage(
+			`Unknown Error: Could not format docstrings. Full error:\n\n
+		  ${err.message}`,
+			bugReportButton
+		);
+		if (response === bugReportButton) {
+			vscode.commands.executeCommand(
+				"vscode.open",
+				vscode.Uri.parse(
+					"https://github.com/singularitti/vscode-julia-formatter/issues/new"
+				)
+			);
+		}
+	}
+}
+
 export function activate(context: vscode.ExtensionContext) {
 	vscode.languages.registerDocumentFormattingEditProvider('foo-lang', {
 		provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
@@ -69,6 +102,10 @@ export function activate(context: vscode.ExtensionContext) {
 			}
 		}
 	});
+}
+
+export interface FormatException {
+	message: string;
 }
 
 // this method is called when your extension is deactivated
