@@ -45,6 +45,21 @@ export async function getJulia(): Promise<string> {
 	}
 }
 
+// From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
+export async function installDocformatter(): Promise<void> {
+	const julia = await getJulia();
+	try {
+		await promiseExec(`${julia} install.jl`);
+	} catch (err) {
+		vscode.window.showErrorMessage(`
+		Could not install JuliaFormatter automatically. Make sure that it
+		is installed correctly and try manually installing with 
+		'julia -e 'using Pkg; Pkg.add("JuliaFormatter")'. \n\n Full error: ${err}'.
+	  `);
+		throw err;
+	}
+}
+
 export function activate(context: vscode.ExtensionContext) {
 	vscode.languages.registerDocumentFormattingEditProvider('foo-lang', {
 		provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
