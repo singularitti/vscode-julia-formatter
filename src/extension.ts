@@ -60,6 +60,7 @@ export async function installDocformatter(): Promise<void> {
 	}
 }
 
+// From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L101-L132
 export async function alertFormattingError(
 	err: FormatException
 ): Promise<void> {
