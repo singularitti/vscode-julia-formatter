@@ -77,12 +77,3 @@ if isempty(ARGS) || haskey(opts, :help)
     exit(1)
 end
 format(ARGS; opts...)
-
-out = Cmd(`git diff --name-only`) |> read |> String
-if out == ""
-    exit(0)
-else
-    @error "Some files have not been formatted !!!"
-    write(stdout, out)
-    exit(1)
-end
