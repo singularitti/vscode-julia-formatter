@@ -2,10 +2,10 @@
 
 ## Features
 
-This is a [Julia language](https://julialang.org/) formatter using
-[`JuliaFormatter.jl`](https://github.com/domluna/JuliaFormatter.jl). The
+This is a [Julia language](https://julialang.org/) formatter using the
+[`JuliaFormatter.jl`](https://github.com/domluna/JuliaFormatter.jl) package. The
 [Julia extension](https://marketplace.visualstudio.com/items?itemName=julialang.language-julia)
-uses [`DocumentFormat`](https://github.com/julia-vscode/DocumentFormat.jl).
+uses the [`DocumentFormat`](https://github.com/julia-vscode/DocumentFormat.jl) package.
 They differ by some decisions.
 
 ## Requirements
