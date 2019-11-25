@@ -55,11 +55,14 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const indent = settings.get<number>("indent") || 4;
 	const afi = settings.get<boolean>("alwaysForIn") || true;
 	const overwrite = settings.get<boolean>("overwrite") || true;
-	return `
-	  ${julia} format.jl
-	  --margin ${margin} --indent ${indent} ${afi ? "--always_for_in" : ""}
-	  ${overwrite ? "--overwrite" : ""} "${path}"
-	`.trim().replace(/\s+/, " "); // Remove extra whitespace (helps with tests)
+	return [
+		`${julia} --compile=min format.jl`,
+		`--margin ${margin}`,
+		`--indent ${indent}`,
+		`${afi ? "--always_for_in" : ""}`,
+		`${overwrite ? "" : "--overwrite"}`,
+		`"${path}"`
+	].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
