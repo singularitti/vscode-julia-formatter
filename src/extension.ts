@@ -3,6 +3,7 @@
 import * as vscode from "vscode";
 import * as util from "util";
 import * as cp from "child_process";
+import * as diff from "diff";
 
 export const promiseExec = util.promisify(cp.exec);
 export let registration: vscode.Disposable | undefined;
@@ -69,7 +70,7 @@ export async function installDocformatter(): Promise<void> {
 	} catch (err) {
 		vscode.window.showErrorMessage(`
 		Could not install JuliaFormatter automatically. Make sure that it
-		is installed correctly and try manually installing with 
+		is installed correctly and try manually installing with
 		'julia -e 'using Pkg; Pkg.add("JuliaFormatter")'. \n\n Full error: ${err}'.
 	  `);
 		throw err;
@@ -107,6 +108,19 @@ export async function alertFormattingError(
 				)
 			);
 		}
+	}
+}
+
+// From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L142-L152
+export async function formatFile(path: string): Promise<diff.Hunk[]> {
+	const command: string = await buildFormatCommand(path);
+	try {
+		const result = await promiseExec(command);
+		const parsed: diff.ParsedDiff[] = diff.parsePatch(result.stdout);
+		return parsed[0].hunks;
+	} catch (err) {
+		alertFormattingError(err);
+		throw err;
 	}
 }
 
