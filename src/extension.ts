@@ -57,8 +57,8 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const overwrite = settings.get<boolean>("overwrite") || true;
 	return `
 	  ${julia} format.jl
-	  --margin ${margin} --indent ${indent} --always_for_in ${afi}
-	  --overwrite ${overwrite} "${path}"
+	  --margin ${margin} --indent ${indent} ${afi ? "--always_for_in" : ""}
+	  ${overwrite ? "--overwrite" : ""} "${path}"
 	`.trim().replace(/\s+/, " "); // Remove extra whitespace (helps with tests)
 }
 
