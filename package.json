@@ -19,7 +19,33 @@
 				"command": "extension.helloWorld",
 				"title": "Hello World"
 			}
-		]
+		],
+		"configuration": {
+			"type": "object",
+			"title": "Julia Formatter configuration",
+			"properties": {
+				"juliaFormatter.margin": {
+					"type": "number",
+					"default": 92,
+					"markdownDescription": "The maximum number of characters of code on a single line. Lines over the limit will be wrapped if possible. There are cases where lines cannot be wrapped and they will still end up wider than the requested margin."
+				},
+				"juliaFormatter.alwaysForIn": {
+					"type": "boolean",
+					"default": true,
+					"description": "Always replaces `=` with `in` for `for` loops. For example, `for i = 1:10` will be transformed to `for i in 1:10`."
+				},
+				"juliaFormatter.indent": {
+					"type": "number",
+					"default": 4,
+					"description": "The number of spaces used for an indentation."
+				},
+				"juliaFormatter.overwrite": {
+					"type": "boolean",
+					"default": true,
+					"description": "Writes the formatted source to a new file where the original filename is suffixed with _fmt, i.e. `filename_fmt.jl`."
+				}
+			}
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
