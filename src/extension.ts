@@ -11,7 +11,7 @@ export let registration: vscode.Disposable | undefined;
 export async function getJulia(): Promise<string> {
 	// From https://github.com/julia-vscode/julia-vscode/blob/dd94db5/src/settings.ts#L8-L14
 	let section = vscode.workspace.getConfiguration('julia');
-	let jlpath = section ? section.get<string>('executablePath', null) : null;
+	let jlpath = section ? section.get<string>('executablePath', 'julia') : null;
 	if (jlpath === "") {
 		jlpath = null;
 	}
