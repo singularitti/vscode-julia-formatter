@@ -7,19 +7,13 @@
 		"vscode": "^1.40.0"
 	},
 	"categories": [
-		"Other"
+		"Formatters"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onLanguage:julia"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
-		"commands": [
-			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
-			}
-		],
 		"configuration": {
 			"type": "object",
 			"title": "Julia Formatter configuration",
