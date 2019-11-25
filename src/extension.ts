@@ -55,8 +55,9 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const indent = settings.get<number>("indent") || 4;
 	const afi = settings.get<boolean>("alwaysForIn") || true;
 	const overwrite = settings.get<boolean>("overwrite") || true;
+	const srcDir = __dirname + '/../src';
 	return [
-		`${julia} --compile=min format.jl`,
+		`${julia} --compile=min ${srcDir}/format.jl`,
 		`--margin ${margin}`,
 		`--indent ${indent}`,
 		`${afi ? "--always_for_in" : ""}`,
@@ -68,8 +69,9 @@ export async function buildFormatCommand(path: string): Promise<string> {
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
 export async function installDocformatter(): Promise<void> {
 	const julia = await getJulia();
+	const srcDir = __dirname + '/../src';
 	try {
-		await promiseExec(`${julia} install.jl`);
+		await promiseExec(`${julia} ${srcDir}/install.jl`);
 	} catch (err) {
 		vscode.window.showErrorMessage(`
 		Could not install JuliaFormatter automatically. Make sure that it
