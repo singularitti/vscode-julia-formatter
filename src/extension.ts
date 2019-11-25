@@ -45,6 +45,22 @@ export async function getJulia(): Promise<string> {
 	}
 }
 
+// From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L54-L72
+export async function buildFormatCommand(path: string): Promise<string> {
+	const julia = await getJulia();
+	const settings = vscode.workspace.getConfiguration("docstringFormatter");
+	// Abbreviated to keep template string short
+	const margin = settings.get<number>("margin") || 92;
+	const indent = settings.get<number>("indent") || 4;
+	const afi = settings.get<boolean>("alwaysForIn") || true;
+	const overwrite = settings.get<boolean>("overwrite") || true;
+	return `
+	  ${julia} format.jl
+	  docformatter "${path}" --margin ${margin} --indent ${indent} --always_for_in ${afi}
+	  --overwrite ${overwrite} "$@"
+	`.trim().replace(/\s+/, " "); // Remove extra whitespace (helps with tests)
+}
+
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
 export async function installDocformatter(): Promise<void> {
 	const julia = await getJulia();
