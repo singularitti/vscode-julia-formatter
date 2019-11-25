@@ -5,3 +5,7 @@ All notable changes to the "vscode-julia-formatter" extension will be documented
 ## 0.0.1
 
 - Initial release, with some very basic functions.
+
+## 0.0.2
+
+- Fix some critical bugs.
