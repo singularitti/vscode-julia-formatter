@@ -149,12 +149,9 @@ export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
 }
 
 export function activate(context: vscode.ExtensionContext) {
-	vscode.languages.registerDocumentFormattingEditProvider('foo-lang', {
-		provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
-			const firstLine = document.lineAt(0);
-			if (firstLine.text !== '42') {
-				return [vscode.TextEdit.insert(firstLine.range.start, '42\n')];
-			}
+	vscode.languages.registerDocumentFormattingEditProvider('julia', {
+		provideDocumentFormattingEdits(document: vscode.TextDocument): Promise<vscode.TextEdit[]> {
+			return formatFile(document.fileName).then(hunksToEdits);
 		}
 	});
 }
@@ -164,4 +161,8 @@ export interface FormatException {
 }
 
 // this method is called when your extension is deactivated
-export function deactivate() { }
+export function deactivate(): void {
+	if (registration) {
+		registration.dispose();
+	}
+}
