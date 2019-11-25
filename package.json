@@ -1,6 +1,16 @@
 {
 	"name": "vscode-julia-formatter",
 	"displayName": "Julia Formatter",
+	"publisher": "singularitti",
+	"icon": "icon.png",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/singularitti/vscode-julia-formatter"
+	},
+	"issues": {
+		"url": "https://github.com/singularitti/vscode-julia-formatter/issues"
+	},
 	"description": "A formatter for the Julia language",
 	"version": "0.0.1",
 	"engines": {
@@ -11,6 +21,11 @@
 	],
 	"activationEvents": [
 		"onLanguage:julia"
+	],
+	"keywords": [
+		"julia",
+		"format",
+		"style"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
