@@ -56,8 +56,8 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const overwrite = settings.get<boolean>("overwrite") || true;
 	return `
 	  ${julia} format.jl
-	  docformatter "${path}" --margin ${margin} --indent ${indent} --always_for_in ${afi}
-	  --overwrite ${overwrite} "$@"
+	  --margin ${margin} --indent ${indent} --always_for_in ${afi}
+	  --overwrite ${overwrite} "${path}"
 	`.trim().replace(/\s+/, " "); // Remove extra whitespace (helps with tests)
 }
 
