@@ -124,6 +124,30 @@ export async function formatFile(path: string): Promise<diff.Hunk[]> {
 	}
 }
 
+// From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L159-L180
+export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
+	return hunks.map(
+		(hunk): vscode.TextEdit => {
+			const startPos = new vscode.Position(hunk.newStart - 1, 0);
+			const endPos = new vscode.Position(
+				hunk.newStart - 1 + hunk.oldLines - 1,
+				hunk.lines[hunk.lines.length - 1].length - 1
+			);
+			const editRange = new vscode.Range(startPos, endPos);
+
+			const newTextLines = hunk.lines
+				.filter(
+					(line): boolean => line.charAt(0) === " " || line.charAt(0) === "+"
+				)
+				.map((line): string => line.substr(1));
+			const lineEndChar: string = hunk.linedelimiters[0];
+			const newText = newTextLines.join(lineEndChar);
+
+			return new vscode.TextEdit(editRange, newText);
+		}
+	);
+}
+
 export function activate(context: vscode.ExtensionContext) {
 	vscode.languages.registerDocumentFormattingEditProvider('foo-lang', {
 		provideDocumentFormattingEdits(document: vscode.TextDocument): vscode.TextEdit[] {
