@@ -86,8 +86,7 @@ export async function alertFormattingError(
 	) {
 		const installButton = "Install Module";
 		const response = await vscode.window.showErrorMessage(
-			`The Julia package 'JuliaFormatter' must be installed to format
-			docstrings.`,
+			`The Julia package 'JuliaFormatter' must be installed to format files.`,
 			installButton
 		);
 		if (response === installButton) {
@@ -96,7 +95,7 @@ export async function alertFormattingError(
 	} else {
 		const bugReportButton = "Submit Bug Report";
 		const response = await vscode.window.showErrorMessage(
-			`Unknown Error: Could not format docstrings. Full error:\n\n
+			`Unknown Error: Could not format file. Full error:\n\n
 		  ${err.message}`,
 			bugReportButton
 		);
