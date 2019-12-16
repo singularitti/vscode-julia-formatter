@@ -68,9 +68,8 @@ export async function buildFormatCommand(path: string): Promise<string> {
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
 export async function installDocformatter(): Promise<void> {
 	const julia = await getJulia();
-	const formatterDir = __dirname + '/../formatter';
 	try {
-		await promiseExec(`${julia} ${formatterDir}/install.jl`);
+		await promiseExec(`${julia} -e 'using Pkg; Pkg.update(); Pkg.add("JuliaFormatter")`);
 	} catch (err) {
 		vscode.window.showErrorMessage(`
 		Could not install JuliaFormatter automatically. Make sure that it
