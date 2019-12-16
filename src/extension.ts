@@ -56,14 +56,13 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const afi = settings.get<boolean>("alwaysForIn") || true;
 	const overwrite = settings.get<boolean>("overwrite") || true;
 	const compile = settings.get<string>("compile") || "min";
+	const whitespace_typedefs = settings.get<boolean>("whitespace_typedefs") || false;
+	const whitespace_ops_in_indices = settings.get<boolean>("whitespace_ops_in_indices") || false;
 	const formatterDir = __dirname + '/../formatter';
 	return [
-		`${julia} --compile=${compile} ${formatterDir}/format.jl`,
-		`--margin ${margin}`,
-		`--indent ${indent}`,
-		`${afi ? "--always_for_in" : ""}`,
-		`${overwrite ? "" : "--overwrite"}`,
-		`"${path}"`
+		`${julia} --compile=${compile}`,
+		`-e 'using JuliaFormatter'`,
+		`-e 'format_file("${path}", overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespace_typedefs}, whitespace_ops_in_indices = ${whitespace_ops_in_indices})'`
 	].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
 }
 
