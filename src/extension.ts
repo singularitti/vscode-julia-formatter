@@ -58,7 +58,6 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const compile = settings.get<string>("compile") || "min";
 	const whitespace_typedefs = settings.get<boolean>("whitespace_typedefs") || false;
 	const whitespace_ops_in_indices = settings.get<boolean>("whitespace_ops_in_indices") || false;
-	const formatterDir = __dirname + '/../formatter';
 	return [
 		`${julia} --compile=${compile}`,
 		`-e 'using JuliaFormatter'`,
