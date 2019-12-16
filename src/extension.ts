@@ -61,7 +61,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	return [
 		`${julia} --compile=${compile}`,
 		`-e 'using JuliaFormatter'`,
-		`-e 'format_file("${path}", overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespace_typedefs}, whitespace_ops_in_indices = ${whitespace_ops_in_indices})'`
+		`-e 'format("${path}"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespace_typedefs}, whitespace_ops_in_indices = ${whitespace_ops_in_indices})'`
 	].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
 }
 
