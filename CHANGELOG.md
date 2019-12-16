@@ -9,3 +9,8 @@ All notable changes to the "vscode-julia-formatter" extension will be documented
 ## 0.0.2
 
 - Fix some critical bugs.
+
+## 0.0.3
+
+- Add 3 more properties: `compile`, `whitespace_typedefs` and `whitespace_ops_in_indices`
+- Simplify code, should improve performance.
