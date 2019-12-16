@@ -9,6 +9,8 @@ const untildify = require('untildify');
 export const promiseExec = util.promisify(cp.exec);
 export let registration: vscode.Disposable | undefined;
 
+let progressBar: vscode.StatusBarItem;
+
 export async function getJulia(): Promise<string> {
 	// From https://github.com/julia-vscode/julia-vscode/blob/dd94db5/src/settings.ts#L8-L14
 	let section = vscode.workspace.getConfiguration('julia');
@@ -118,8 +120,12 @@ export async function alertFormattingError(
 export async function formatFile(path: string): Promise<diff.Hunk[]> {
 	const command: string = await buildFormatCommand(path);
 	try {
+		progressBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -1);
+		progressBar.text = "Formatting file...";
+		progressBar.show();
 		const result = await promiseExec(command);
 		const parsed: diff.ParsedDiff[] = diff.parsePatch(result.stdout);
+		progressBar.hide();
 		return parsed[0].hunks;
 	} catch (err) {
 		alertFormattingError(err);
