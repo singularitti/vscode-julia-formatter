@@ -60,7 +60,7 @@
 						"min",
 						"all"
 					],
-					"description": "Control the compilation level of Julia."
+					"description": "Control the compilation level of Julia. Available values are 'min' or 'all'."
 				},
 				"juliaFormatter.whitespace_typedefs": {
 					"type": "boolean",
