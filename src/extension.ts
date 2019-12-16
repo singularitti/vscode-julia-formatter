@@ -55,9 +55,10 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const indent = settings.get<number>("indent") || 4;
 	const afi = settings.get<boolean>("alwaysForIn") || true;
 	const overwrite = settings.get<boolean>("overwrite") || true;
+	const compile = settings.get<string>("compile") || "min";
 	const formatterDir = __dirname + '/../formatter';
 	return [
-		`${julia} --compile=min ${formatterDir}/format.jl`,
+		`${julia} --compile=${compile} ${formatterDir}/format.jl`,
 		`--margin ${margin}`,
 		`--indent ${indent}`,
 		`${afi ? "--always_for_in" : ""}`,
