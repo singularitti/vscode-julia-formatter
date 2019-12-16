@@ -52,7 +52,16 @@
 					"type": "boolean",
 					"default": true,
 					"description": "Writes the formatted source to a new file where the original filename is suffixed with _fmt, i.e. `filename_fmt.jl`."
-				}
+				},
+				"juliaFormatter.compile": {
+					"type": "string",
+					"default": "min",
+					"enum": [
+						"min",
+						"all"
+					],
+					"description": "Control the compilation level of Julia."
+				},
 			}
 		}
 	},
