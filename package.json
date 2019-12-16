@@ -97,6 +97,7 @@
 	"dependencies": {
 		"child_process": "^1.0.2",
 		"diff": "^4.0.1",
+		"untildify": "^4.0.0",
 		"util": "^0.12.1"
 	}
 }
