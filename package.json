@@ -33,6 +33,11 @@
 			"type": "object",
 			"title": "Julia Formatter configuration",
 			"properties": {
+				"juliaFormatter.project": {
+					"type": "string",
+					"default": "~/.julia/environments/v1.3/",
+					"description": "Use a custom environment for running `JuliaFormatter`."
+				},
 				"juliaFormatter.margin": {
 					"type": "number",
 					"default": 92,
