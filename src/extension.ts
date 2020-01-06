@@ -54,6 +54,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const julia = await getJulia();
 	const settings = vscode.workspace.getConfiguration("docstringFormatter");
 	// Abbreviated to keep template string short
+	const project = settings.get<string>("project") || "~/.julia/environments/v1.3/";
 	const margin = settings.get<number>("margin") || 92;
 	const indent = settings.get<number>("indent") || 4;
 	const afi = settings.get<boolean>("alwaysForIn") || true;
@@ -63,6 +64,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const whitespace_ops_in_indices = settings.get<boolean>("whitespace_ops_in_indices") || false;
 	return [
 		`${julia} --compile=${compile}`,
+		`--project=${project}`,
 		`-e 'using JuliaFormatter'`,
 		`-e 'format("${path}"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespace_typedefs}, whitespace_ops_in_indices = ${whitespace_ops_in_indices})'`
 	].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
