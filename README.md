@@ -30,6 +30,13 @@ This extension contributes the following settings:
   For example, `for i = 1:10` will be transformed to `for i in 1:10`. `true` by default.
 * `juliaFormatter.overwrite`: Writes the formatted source to a new file where
   the original filename is suffixed with _fmt, i.e. `filename_fmt.jl`. `true` by default.
+* `juliaFormatter.whitespace_typedefs` : If `true` , whitespace is added for type definitions.
+  Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}` .
+* `juliaFormatter.whitespace_ops_in_indices` : If `true` , whitespace is added for binary
+  operations in indices. Make this `true` if you prefer `arr[a + b]` to `arr[a+b]` .
+
+For more detailed explanation of these settings, please go to
+[its official docs](https://github.com/domluna/JuliaFormatter.jl/blob/master/README.md).
 
 ## Release Notes
 
