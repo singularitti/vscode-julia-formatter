@@ -46,6 +46,15 @@ It is recommended to use this extension with the [Format in context
 menus](https://marketplace.visualstudio.com/items?itemName=lacroixdavid1.vscode-format-context-menu)
 extension (not an ad!). It allows formatting multiple files at a time.
 
+If you want to use this extension instead of the Julia extension to format your file, you
+may want to put
+```json
+"[julia]": {
+    "editor.defaultFormatter": "singularitti.vscode-julia-formatter"
+},
+```
+in the editor's `settings.json`.
+
 ## Release Notes
 
 See [CHANGELOG.md](./CHANGELOG.md) for release notes.
