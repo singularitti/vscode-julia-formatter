@@ -17,6 +17,8 @@ They differ by some decisions.
    ```julia
    ]add JuliaFormatter
    ```
+   It is better to install the latest version of `JuliaFormatter`, since some settings
+   require that.
 
 ## Extension Settings
 
@@ -37,6 +39,12 @@ This extension contributes the following settings:
 
 For more detailed explanation of these settings, please go to
 [its official docs](https://github.com/domluna/JuliaFormatter.jl/blob/master/README.md).
+
+## Suggestion
+
+It is recommended to use this extension with the [Format in context
+menus](https://marketplace.visualstudio.com/items?itemName=lacroixdavid1.vscode-format-context-menu)
+extension (not an ad!). It allows formatting multiple files at a time.
 
 ## Release Notes
 
