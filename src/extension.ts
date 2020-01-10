@@ -121,7 +121,7 @@ export async function formatFile(path: string): Promise<diff.Hunk[]> {
 	const command: string = await buildFormatCommand(path);
 	try {
 		progressBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -1);
-		progressBar.text = "Formatting file...";
+		progressBar.text = "Formatting...";
 		progressBar.show();
 		const result = await promiseExec(command);
 		const parsed: diff.ParsedDiff[] = diff.parsePatch(result.stdout);
