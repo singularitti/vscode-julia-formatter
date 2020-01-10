@@ -17,6 +17,8 @@ They differ by some decisions.
    ```julia
    ]add JuliaFormatter
    ```
+   It is better to install the latest version of `JuliaFormatter`, since some settings
+   require that.
 
 ## Extension Settings
 
@@ -30,6 +32,28 @@ This extension contributes the following settings:
   For example, `for i = 1:10` will be transformed to `for i in 1:10`. `true` by default.
 * `juliaFormatter.overwrite`: Writes the formatted source to a new file where
   the original filename is suffixed with _fmt, i.e. `filename_fmt.jl`. `true` by default.
+* `juliaFormatter.whitespace_typedefs` : If `true` , whitespace is added for type definitions.
+  Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}` .
+* `juliaFormatter.whitespace_ops_in_indices` : If `true` , whitespace is added for binary
+  operations in indices. Make this `true` if you prefer `arr[a + b]` to `arr[a+b]` .
+
+For more detailed explanation of these settings, please go to
+[its official docs](https://github.com/domluna/JuliaFormatter.jl/blob/master/README.md).
+
+## Suggestion
+
+It is recommended to use this extension with the [Format in context
+menus](https://marketplace.visualstudio.com/items?itemName=lacroixdavid1.vscode-format-context-menu)
+extension (not an ad!). It allows formatting multiple files at a time.
+
+If you want to use this extension instead of the Julia extension to format your file, you
+may want to put
+```json
+"[julia]": {
+    "editor.defaultFormatter": "singularitti.vscode-julia-formatter"
+},
+```
+in the editor's `settings.json`.
 
 ## Release Notes
 
