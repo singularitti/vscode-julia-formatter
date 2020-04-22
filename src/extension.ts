@@ -66,10 +66,19 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const pipeToFunctionCall = settings.get<boolean>("pipeToFunctionCall") || false;
 	const shortToLongFunctionDef = settings.get<boolean>("shortToLongFunctionDef") || false;
 	const alwaysUseReturn = settings.get<boolean>("alwaysUseReturn") || false;
+	let style: string;
+	switch (settings.get<string>("style")) {
+		case "yas":
+			style = "YASStyle()"
+			break;
+		default:
+			style = "DefaultStyle()"
+			break;
+	}
 	const epath = path.split('\\').join('\\\\');
 	return [
 		`${julia} --compile=${compile}`,
-		`-e "using JuliaFormatter; format(\\\"${epath}\\\"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespaceTypedefs}, whitespace_ops_in_indices = ${whitespaceOpsInIndices}, remove_extra_newlines = ${removeExtraNewlines}, import_to_using = ${importToUsing}, pipe_to_function_call = ${pipeToFunctionCall}, short_to_long_function_def = ${shortToLongFunctionDef}, always_use_return = ${alwaysUseReturn})"`
+		`-e "using JuliaFormatter; format(\\\"${epath}\\\"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespaceTypedefs}, whitespace_ops_in_indices = ${whitespaceOpsInIndices}, remove_extra_newlines = ${removeExtraNewlines}, import_to_using = ${importToUsing}, pipe_to_function_call = ${pipeToFunctionCall}, short_to_long_function_def = ${shortToLongFunctionDef}, always_use_return = ${alwaysUseReturn}, style = ${style})"`
 	].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
 }
 

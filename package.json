@@ -62,6 +62,15 @@
           ],
           "description": "Control the compilation level of Julia. Available values are 'min' or 'all'."
         },
+        "juliaFormatter.style": {
+          "type": "string",
+          "default": "default",
+          "enum": [
+            "default",
+            "yas"
+          ],
+          "description": "Formatting styles. Choose from: `'default'` and `'yas'`."
+        },
         "juliaFormatter.whitespaceTypedefs": {
           "type": "boolean",
           "default": false,
