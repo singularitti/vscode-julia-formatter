@@ -1,5 +1,7 @@
 # Julia Formatter Extension
 
+[![Build Status](https://dev.azure.com/singularitti/vscode-julia-formatter/_apis/build/status/singularitti.vscode-julia-formatter?branchName=master)](https://dev.azure.com/singularitti/vscode-julia-formatter/_build/latest?definitionId=1&branchName=master)
+
 ## Features
 
 This is a [Julia language](https://julialang.org/) formatter using the
