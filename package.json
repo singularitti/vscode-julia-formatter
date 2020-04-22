@@ -62,15 +62,49 @@
           ],
           "description": "Control the compilation level of Julia. Available values are 'min' or 'all'."
         },
-        "juliaFormatter.whitespace_typedefs": {
+        "juliaFormatter.style": {
+          "type": "string",
+          "default": "default",
+          "enum": [
+            "default",
+            "yas"
+          ],
+          "description": "Formatting styles. Choose from: `'default'` and `'yas'`."
+        },
+        "juliaFormatter.whitespaceTypedefs": {
           "type": "boolean",
           "default": false,
           "description": "If `true`, whitespace is added for type definitions. Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}`."
         },
-        "juliaFormatter.whitespace_ops_in_indices": {
+        "juliaFormatter.whitespaceOpsInIndices": {
           "type": "boolean",
           "default": false,
           "description": "If `true`, whitespace is added for binary operations in indices. Make this `true` if you prefer `arr[a + b]` to `arr[a+b]`."
+        },
+        "juliaFormatter.removeExtraNewlines": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, superflous newlines will be removed."
+        },
+        "juliaFormatter.importToUsing": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, `import` expressions are rewritten to `using` expressions."
+        },
+        "juliaFormatter.pipeToFunctionCall": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, `x |> f` is rewritten to `f(x)`."
+        },
+        "juliaFormatter.shortToLongFunctionDef": {
+          "type": "boolean",
+          "default": false,
+          "description": "Transforms a short function definition to a long function definition."
+        },
+        "juliaFormatter.alwaysUseReturn": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, `return` will be prepended to the last expression where applicable in function definitions, macro definitions, and do blocks."
         }
       }
     }

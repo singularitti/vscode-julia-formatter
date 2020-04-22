@@ -59,12 +59,26 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const afi = settings.get<boolean>("alwaysForIn") || true;
 	const overwrite = settings.get<boolean>("overwrite") || true;
 	const compile = settings.get<string>("compile") || "min";
-	const whitespace_typedefs = settings.get<boolean>("whitespace_typedefs") || false;
-	const whitespace_ops_in_indices = settings.get<boolean>("whitespace_ops_in_indices") || false;
+	const whitespaceTypedefs = settings.get<boolean>("whitespaceTypedefs") || false;
+	const whitespaceOpsInIndices = settings.get<boolean>("whitespaceOpsInIndices") || false;
+	const removeExtraNewlines = settings.get<boolean>("removeExtraNewlines") || false;
+	const importToUsing = settings.get<boolean>("importToUsing") || false;
+	const pipeToFunctionCall = settings.get<boolean>("pipeToFunctionCall") || false;
+	const shortToLongFunctionDef = settings.get<boolean>("shortToLongFunctionDef") || false;
+	const alwaysUseReturn = settings.get<boolean>("alwaysUseReturn") || false;
+	let style: string;
+	switch (settings.get<string>("style")) {
+		case "yas":
+			style = "YASStyle()"
+			break;
+		default:
+			style = "DefaultStyle()"
+			break;
+	}
 	const epath = path.split('\\').join('\\\\');
 	return [
 		`${julia} --compile=${compile}`,
-		`-e "using JuliaFormatter; format(\\\"${epath}\\\"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespace_typedefs}, whitespace_ops_in_indices = ${whitespace_ops_in_indices})"`
+		`-e "using JuliaFormatter; format(\\\"${epath}\\\"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespaceTypedefs}, whitespace_ops_in_indices = ${whitespaceOpsInIndices}, remove_extra_newlines = ${removeExtraNewlines}, import_to_using = ${importToUsing}, pipe_to_function_call = ${pipeToFunctionCall}, short_to_long_function_def = ${shortToLongFunctionDef}, always_use_return = ${alwaysUseReturn}, style = ${style})"`
 	].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
 }
 
