@@ -1,103 +1,103 @@
 {
-	"name": "vscode-julia-formatter",
-	"displayName": "Julia Formatter",
-	"publisher": "singularitti",
-	"icon": "icon.png",
-	"license": "MIT",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/singularitti/vscode-julia-formatter"
-	},
-	"issues": {
-		"url": "https://github.com/singularitti/vscode-julia-formatter/issues"
-	},
-	"description": "A formatter for the Julia language",
-	"version": "0.0.5",
-	"engines": {
-		"vscode": "^1.40.0"
-	},
-	"categories": [
-		"Formatters"
-	],
-	"activationEvents": [
-		"onLanguage:julia"
-	],
-	"keywords": [
-		"julia",
-		"format",
-		"style"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"configuration": {
-			"type": "object",
-			"title": "Julia Formatter configuration",
-			"properties": {
-				"juliaFormatter.margin": {
-					"type": "number",
-					"default": 92,
-					"description": "The maximum number of characters of code on a single line. Lines over the limit will be wrapped if possible. There are cases where lines cannot be wrapped and they will still end up wider than the requested margin."
-				},
-				"juliaFormatter.alwaysForIn": {
-					"type": "boolean",
-					"default": true,
-					"description": "Always replaces `=` with `in` for `for` loops. For example, `for i = 1:10` will be transformed to `for i in 1:10`."
-				},
-				"juliaFormatter.indent": {
-					"type": "number",
-					"default": 4,
-					"description": "The number of spaces used for an indentation."
-				},
-				"juliaFormatter.overwrite": {
-					"type": "boolean",
-					"default": true,
-					"description": "Writes the formatted source to a new file where the original filename is suffixed with _fmt, i.e. `filename_fmt.jl`."
-				},
-				"juliaFormatter.compile": {
-					"type": "string",
-					"default": "min",
-					"enum": [
-						"min",
-						"all"
-					],
-					"description": "Control the compilation level of Julia. Available values are 'min' or 'all'."
-				},
-				"juliaFormatter.whitespace_typedefs": {
-					"type": "boolean",
-					"default": false,
-					"description": "If `true`, whitespace is added for type definitions. Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}`."
-				},
-				"juliaFormatter.whitespace_ops_in_indices": {
-					"type": "boolean",
-					"default": false,
-					"description": "If `true`, whitespace is added for binary operations in indices. Make this `true` if you prefer `arr[a + b]` to `arr[a+b]`."
-				}
-			}
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/diff": "^4.0.2",
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.11.7",
-		"@types/vscode": "^1.40.0",
-		"glob": "^7.1.5",
-		"mocha": "^6.2.2",
-		"tslint": "^5.20.0",
-		"typescript": "^3.6.4",
-		"vscode-test": "^1.2.2"
-	},
-	"dependencies": {
-		"child_process": "^1.0.2",
-		"diff": "^4.0.1",
-		"untildify": "^4.0.0",
-		"util": "^0.12.1"
-	}
+  "name": "vscode-julia-formatter",
+  "displayName": "Julia Formatter",
+  "publisher": "singularitti",
+  "icon": "icon.png",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/singularitti/vscode-julia-formatter"
+  },
+  "issues": {
+    "url": "https://github.com/singularitti/vscode-julia-formatter/issues"
+  },
+  "description": "A formatter for the Julia language",
+  "version": "0.0.6",
+  "engines": {
+    "vscode": "^1.40.0"
+  },
+  "categories": [
+    "Formatters"
+  ],
+  "activationEvents": [
+    "onLanguage:julia"
+  ],
+  "keywords": [
+    "julia",
+    "format",
+    "style"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Julia Formatter configuration",
+      "properties": {
+        "juliaFormatter.margin": {
+          "type": "number",
+          "default": 92,
+          "description": "The maximum number of characters of code on a single line. Lines over the limit will be wrapped if possible. There are cases where lines cannot be wrapped and they will still end up wider than the requested margin."
+        },
+        "juliaFormatter.alwaysForIn": {
+          "type": "boolean",
+          "default": true,
+          "description": "Always replaces `=` with `in` for `for` loops. For example, `for i = 1:10` will be transformed to `for i in 1:10`."
+        },
+        "juliaFormatter.indent": {
+          "type": "number",
+          "default": 4,
+          "description": "The number of spaces used for an indentation."
+        },
+        "juliaFormatter.overwrite": {
+          "type": "boolean",
+          "default": true,
+          "description": "Writes the formatted source to a new file where the original filename is suffixed with _fmt, i.e. `filename_fmt.jl`."
+        },
+        "juliaFormatter.compile": {
+          "type": "string",
+          "default": "min",
+          "enum": [
+            "min",
+            "all"
+          ],
+          "description": "Control the compilation level of Julia. Available values are 'min' or 'all'."
+        },
+        "juliaFormatter.whitespace_typedefs": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, whitespace is added for type definitions. Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}`."
+        },
+        "juliaFormatter.whitespace_ops_in_indices": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, whitespace is added for binary operations in indices. Make this `true` if you prefer `arr[a + b]` to `arr[a+b]`."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/diff": "^4.0.2",
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.11.7",
+    "@types/vscode": "^1.40.0",
+    "glob": "^7.1.5",
+    "mocha": "^6.2.2",
+    "tslint": "^5.20.0",
+    "typescript": "^3.6.4",
+    "vscode-test": "^1.2.2"
+  },
+  "dependencies": {
+    "child_process": "^1.0.2",
+    "diff": "^4.0.1",
+    "untildify": "^4.0.0",
+    "util": "^0.12.1"
+  }
 }

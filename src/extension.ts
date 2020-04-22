@@ -52,7 +52,7 @@ export async function getJulia(): Promise<string> {
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L54-L72
 export async function buildFormatCommand(path: string): Promise<string> {
 	const julia = await getJulia();
-	const settings = vscode.workspace.getConfiguration("docstringFormatter");
+	const settings = vscode.workspace.getConfiguration("juliaFormatter");
 	// Abbreviated to keep template string short
 	const margin = settings.get<number>("margin") || 92;
 	const indent = settings.get<number>("indent") || 4;
@@ -61,10 +61,10 @@ export async function buildFormatCommand(path: string): Promise<string> {
 	const compile = settings.get<string>("compile") || "min";
 	const whitespace_typedefs = settings.get<boolean>("whitespace_typedefs") || false;
 	const whitespace_ops_in_indices = settings.get<boolean>("whitespace_ops_in_indices") || false;
+	const epath = path.split('\\').join('\\\\');
 	return [
 		`${julia} --compile=${compile}`,
-		`-e 'using JuliaFormatter'`,
-		`-e 'format("${path}"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespace_typedefs}, whitespace_ops_in_indices = ${whitespace_ops_in_indices})'`
+		`-e "using JuliaFormatter; format(\\\"${epath}\\\"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespace_typedefs}, whitespace_ops_in_indices = ${whitespace_ops_in_indices})"`
 	].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
 }
 
@@ -72,12 +72,12 @@ export async function buildFormatCommand(path: string): Promise<string> {
 export async function installDocformatter(): Promise<void> {
 	const julia = await getJulia();
 	try {
-		await promiseExec(`${julia} -e 'using Pkg; Pkg.update(); Pkg.add("JuliaFormatter")`);
+		await promiseExec(`${julia} -e "using Pkg; Pkg.update(); Pkg.add(\\\"JuliaFormatter\\\")"`);
 	} catch (err) {
 		vscode.window.showErrorMessage(`
 		Could not install JuliaFormatter automatically. Make sure that it
 		is installed correctly and try manually installing with
-		'julia -e 'using Pkg; Pkg.add("JuliaFormatter")'. \n\n Full error: ${err}'.
+		'julia -e \"using Pkg; Pkg.add(\\\"JuliaFormatter\\\")\". \n\n Full error: ${err}'.
 	  `);
 		throw err;
 	}
