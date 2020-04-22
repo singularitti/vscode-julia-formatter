@@ -28,3 +28,8 @@ All notable changes to the "vscode-julia-formatter" extension will be documented
 - Fixes settings for the extension not working at all
 
 Thanks to @friggog in #10
+
+## 0.1.0
+
+- Update configs to the latest version
+- Close #8
