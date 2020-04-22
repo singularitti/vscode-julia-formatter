@@ -62,12 +62,12 @@
           ],
           "description": "Control the compilation level of Julia. Available values are 'min' or 'all'."
         },
-        "juliaFormatter.whitespace_typedefs": {
+        "juliaFormatter.whitespaceTypedefs": {
           "type": "boolean",
           "default": false,
           "description": "If `true`, whitespace is added for type definitions. Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}`."
         },
-        "juliaFormatter.whitespace_ops_in_indices": {
+        "juliaFormatter.whitespaceOpsInIndices": {
           "type": "boolean",
           "default": false,
           "description": "If `true`, whitespace is added for binary operations in indices. Make this `true` if you prefer `arr[a + b]` to `arr[a+b]`."
