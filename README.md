@@ -26,26 +26,32 @@ They differ by some decisions.
 
 This extension contributes the following settings:
 
-* `juliaFormatter.margin`: The maximum number of characters of code on a single line.
-  Lines over the limit will be wrapped if possible. There are cases where lines cannot be
-  wrapped and they will still end up wider than the requested margin. `92` by default.
+* `juliaFormatter.margin`: The maximum number of characters of code on a single line. Lines
+  over the limit will be wrapped if possible. There are cases where lines cannot be wrapped
+  and they will still end up wider than the requested margin. `92` by default.
 * `juliaFormatter.indent`: The number of spaces used for an indentation. `4` by default.
-* `juliaFormatter.alwaysForIn`: Always replaces `=` with `in` for `for` loops.
-  For example, `for i = 1:10` will be transformed to `for i in 1:10`. `true` by default.
-* `juliaFormatter.overwrite`: Writes the formatted source to a new file where
-  the original filename is suffixed with _fmt, i.e. `filename_fmt.jl`. `true` by default.
-* `juliaFormatter.whitespaceTypedefs` : If `true` , whitespace is added for type definitions.
-  Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}` .
+* `juliaFormatter.alwaysForIn`: Always replaces `=` with `in` for `for` loops. For example,
+  `for i = 1:10` will be transformed to `for i in 1:10`. `true` by default.
+* `juliaFormatter.overwrite`: Writes the formatted source to a new file where the original
+  filename is suffixed with _fmt, i.e. `filename_fmt.jl`. `true` by default.
+* `juliaFormatter.whitespaceTypedefs` : If `true` , whitespace is added for type
+  definitions. Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}` .
 * `juliaFormatter.whitespaceOpsInIndices` : If `true` , whitespace is added for binary
   operations in indices. Make this `true` if you prefer `arr[a + b]` to `arr[a+b]` .
 * `juliaFormatter.removeExtraNewlines`: If `true`, superflous newlines will be removed.
-* `juliaFormatter.importToUsing`: If `true`, `import` expressions are rewritten to `using` expressions.
+* `juliaFormatter.importToUsing`: If `true`, `import` expressions are rewritten to `using`
+  expressions.
 * `juliaFormatter.pipeToFunctionCall`: If `true`, `x |> f` is rewritten to `f(x)`.
-* `juliaFormatter.shortToLongFunctionDef`: Transforms a short function definition to a long function definition.
-* `juliaFormatter.alwaysUseReturn`: If `true`, `return` will be prepended to the last expression where applicable in function definitions, macro definitions, and do blocks.
-* `juliaFormatter.compile`: Control the compilation level of Julia. Available values are 'min' or 'all'.
+* `juliaFormatter.shortToLongFunctionDef`: Transforms a short function definition to a long
+  function definition.
+* `juliaFormatter.alwaysUseReturn`: If `true`, `return` will be prepended to the last
+  expression where applicable in function definitions, macro definitions, and do blocks.
+* `juliaFormatter.compile`: Control the compilation level of Julia. Available values are
+  'min' or 'all'.
 * `juliaFormatter.style`: Formatting styles. Choose from: `'default'` and `'yas'`.
-* `juliaFormatter.annotateUntypedFieldsWithAny`: If `true`, Annotates fields in a type definitions with `::Any` if no type annotation is provided (Requires `JuliaFormatter.jl v0.6.3`).
+* `juliaFormatter.annotateUntypedFieldsWithAny`: If `true`, Annotates fields in a type
+  definitions with `::Any` if no type annotation is provided (Requires
+  `JuliaFormatter.jl v0.6.3`).
 
 For more detailed explanation of these settings, please go to
 [its official docs](https://domluna.github.io/JuliaFormatter.jl/stable/).
