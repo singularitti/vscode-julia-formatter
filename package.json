@@ -109,7 +109,7 @@
         "juliaFormatter.annotateUntypedFieldsWithAny": {
           "type": "boolean",
           "default": true,
-          "description": "If `true`, Annotates fields in a type definitions with `::Any` if no type annotation is provided."
+          "description": "If `true`, Annotates fields in a type definitions with `::Any` if no type annotation is provided (Requires `JuliaFormatter.jl v0.6.3`)."
         }
       }
     }
