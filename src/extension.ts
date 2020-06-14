@@ -89,7 +89,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
         shortToLongFunctionDef ? "short_to_long_function_def = true," : "",
         alwaysUseReturn ? "always_use_return = true," : "",
         !annotateUntypedFieldsWithAny ? "annotate_untyped_fields_with_any = false," : "",
-        style != "yas" ? `style = \"${style}\",` : "",
+        style != "yas" ? `style = ${style},` : "",
     ].join(" ")
     const epath = path.split('\\').join('\\\\');
     return [
