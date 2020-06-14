@@ -33,3 +33,8 @@ Thanks to @friggog in #10
 
 - Update configs to the latest version
 - Close #8
+
+### 0.2.1
+
+- Add option `annotateUntypedFieldsWithAny` introduced in `JuliaFormatter.jl v0.6.3`
+- Fix a bug that `alwaysForIn` & `overwrite` do not work properly
