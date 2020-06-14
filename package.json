@@ -105,6 +105,11 @@
           "type": "boolean",
           "default": false,
           "description": "If `true`, `return` will be prepended to the last expression where applicable in function definitions, macro definitions, and do blocks."
+        },
+        "juliaFormatter.annotateUntypedFieldsWithAny": {
+          "type": "boolean",
+          "default": true,
+          "description": "If `true`, Annotates fields in a type definitions with `::Any` if no type annotation is provided."
         }
       }
     }
