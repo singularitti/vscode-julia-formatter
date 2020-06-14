@@ -56,8 +56,8 @@ export async function buildFormatCommand(path: string): Promise<string> {
     // Abbreviated to keep template string short
     const margin = settings.get<number>("margin") || 92;
     const indent = settings.get<number>("indent") || 4;
-    const afi = settings.get<boolean>("alwaysForIn") || true;
-    const overwrite = settings.get<boolean>("overwrite") || true;
+    const afi = settings.get<boolean>("alwaysForIn") && true;
+    const overwrite = settings.get<boolean>("overwrite") && true;
     const compile = settings.get<string>("compile") || "min";
     const whitespaceTypedefs = settings.get<boolean>("whitespaceTypedefs") || false;
     const whitespaceOpsInIndices = settings.get<boolean>("whitespaceOpsInIndices") || false;
@@ -66,7 +66,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
     const pipeToFunctionCall = settings.get<boolean>("pipeToFunctionCall") || false;
     const shortToLongFunctionDef = settings.get<boolean>("shortToLongFunctionDef") || false;
     const alwaysUseReturn = settings.get<boolean>("alwaysUseReturn") || false;
-    const annotateUntypedFieldsWithAny = settings.get<boolean>("annotateUntypedFieldsWithAny") || true;
+    const annotateUntypedFieldsWithAny = settings.get<boolean>("annotateUntypedFieldsWithAny") && true;
     let style: string;
     switch (settings.get<string>("style")) {
         case "yas":
@@ -76,11 +76,12 @@ export async function buildFormatCommand(path: string): Promise<string> {
             style = "DefaultStyle()";
             break;
     }
-    let options = [
-        !overwrite ? "overwrite = false," : "",
+    const options = [
+        style != "yas" ? `style = ${style},` : "",
+        overwrite ? "" : "overwrite = false,",
         indent != 4 ? `indent = ${indent},` : "",
         margin != 92 ? `margin = ${margin},` : "",
-        !afi ? "always_for_in = false," : "",
+        afi ? "" : "always_for_in = false,",
         whitespaceTypedefs ? "whitespace_typedefs = true," : "",
         whitespaceOpsInIndices ? "whitespace_ops_in_indices = true," : "",
         removeExtraNewlines ? "remove_extra_newlines = true," : "",
@@ -88,8 +89,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
         pipeToFunctionCall ? "pipe_to_function_call = true," : "",
         shortToLongFunctionDef ? "short_to_long_function_def = true," : "",
         alwaysUseReturn ? "always_use_return = true," : "",
-        !annotateUntypedFieldsWithAny ? "annotate_untyped_fields_with_any = false," : "",
-        style != "yas" ? `style = ${style},` : "",
+        annotateUntypedFieldsWithAny ? "" : "annotate_untyped_fields_with_any = false,",
     ].join(" ")
     const epath = path.split('\\').join('\\\\');
     return [
