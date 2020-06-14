@@ -45,6 +45,7 @@ This extension contributes the following settings:
 * `juliaFormatter.alwaysUseReturn`: If `true`, `return` will be prepended to the last expression where applicable in function definitions, macro definitions, and do blocks.
 * `juliaFormatter.compile`: Control the compilation level of Julia. Available values are 'min' or 'all'.
 * `juliaFormatter.style`: Formatting styles. Choose from: `'default'` and `'yas'`.
+* `juliaFormatter.annotateUntypedFieldsWithAny`: If `true`, Annotates fields in a type definitions with `::Any` if no type annotation is provided (Requires `JuliaFormatter.jl v0.6.3`).
 
 For more detailed explanation of these settings, please go to
 [its official docs](https://domluna.github.io/JuliaFormatter.jl/stable/).
