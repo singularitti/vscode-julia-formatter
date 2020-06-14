@@ -66,6 +66,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
     const pipeToFunctionCall = settings.get<boolean>("pipeToFunctionCall") || false;
     const shortToLongFunctionDef = settings.get<boolean>("shortToLongFunctionDef") || false;
     const alwaysUseReturn = settings.get<boolean>("alwaysUseReturn") || false;
+    const annotateUntypedFieldsWithAny = settings.get<boolean>("annotateUntypedFieldsWithAny") || true;
     let style: string;
     switch (settings.get<string>("style")) {
         case "yas":
@@ -75,10 +76,25 @@ export async function buildFormatCommand(path: string): Promise<string> {
             style = "DefaultStyle()";
             break;
     }
+    let options = [
+        !overwrite ? "overwrite = false," : "",
+        indent != 4 ? `indent = ${indent},` : "",
+        margin != 92 ? `margin = ${margin},` : "",
+        !afi ? "always_for_in = false," : "",
+        whitespaceTypedefs ? "whitespace_typedefs = true," : "",
+        whitespaceOpsInIndices ? "whitespace_ops_in_indices = true," : "",
+        removeExtraNewlines ? "remove_extra_newlines = true," : "",
+        importToUsing ? "import_to_using = true," : "",
+        pipeToFunctionCall ? "pipe_to_function_call = true," : "",
+        shortToLongFunctionDef ? "short_to_long_function_def = true," : "",
+        alwaysUseReturn ? "always_use_return = true," : "",
+        !annotateUntypedFieldsWithAny ? "annotate_untyped_fields_with_any = false," : "",
+        style != "yas" ? `style = ${style},` : "",
+    ].join(" ")
     const epath = path.split('\\').join('\\\\');
     return [
         `${julia} --compile=${compile}`,
-        `-e "using JuliaFormatter; format(\\\"${epath}\\\"; overwrite = ${overwrite}, indent = ${indent}, margin = ${margin}, always_for_in = ${afi}, whitespace_typedefs = ${whitespaceTypedefs}, whitespace_ops_in_indices = ${whitespaceOpsInIndices}, remove_extra_newlines = ${removeExtraNewlines}, import_to_using = ${importToUsing}, pipe_to_function_call = ${pipeToFunctionCall}, short_to_long_function_def = ${shortToLongFunctionDef}, always_use_return = ${alwaysUseReturn}, style = ${style})"`
+        `-e "using JuliaFormatter; format(\\\"${epath}\\\"; ${options})"`
     ].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
 }
 
