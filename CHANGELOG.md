@@ -38,3 +38,8 @@ Thanks to @friggog in #10
 
 - Add option `annotateUntypedFieldsWithAny` introduced in `JuliaFormatter.jl v0.6.3`
 - Fix a bug that `alwaysForIn` & `overwrite` do not work properly
+
+### 0.2.2
+
+- Fix [`alwaysForIn` not working #14](https://github.com/singularitti/vscode-julia-formatter/issues/14)
+- Fix `progressBar` will still show even if formatting fails
