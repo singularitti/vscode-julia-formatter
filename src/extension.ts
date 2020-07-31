@@ -56,7 +56,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
     // Abbreviated to keep template string short
     const margin = settings.get<number>("margin") || 92;
     const indent = settings.get<number>("indent") || 4;
-    const afi = settings.get<boolean>("alwaysForIn") && true;
+    const alwaysForIn = settings.get<boolean>("alwaysForIn") || false;
     const overwrite = settings.get<boolean>("overwrite") && true;
     const compile = settings.get<string>("compile") || "min";
     const whitespaceTypedefs = settings.get<boolean>("whitespaceTypedefs") || false;
@@ -81,7 +81,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
         overwrite ? "" : "overwrite = false,",
         indent != 4 ? `indent = ${indent},` : "",
         margin != 92 ? `margin = ${margin},` : "",
-        afi ? "" : "always_for_in = false,",
+        alwaysForIn ? "always_for_in = true," : "",
         whitespaceTypedefs ? "whitespace_typedefs = true," : "",
         whitespaceOpsInIndices ? "whitespace_ops_in_indices = true," : "",
         removeExtraNewlines ? "remove_extra_newlines = true," : "",
