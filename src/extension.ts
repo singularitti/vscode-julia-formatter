@@ -155,11 +155,12 @@ export async function formatFile(path: string): Promise<diff.Hunk[]> {
         progressBar.show();
         const result = await promiseExec(command);
         const parsed: diff.ParsedDiff[] = diff.parsePatch(result.stdout);
-        progressBar.hide();
         return parsed[0].hunks;
     } catch (err) {
         alertFormattingError(err);
         throw err;
+    } finally {
+        progressBar.dispose();
     }
 }
 
