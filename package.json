@@ -134,6 +134,7 @@
     "vscode-test": "^1.2.2"
   },
   "dependencies": {
+    "@rauschma/stringio": "^1.4.0",
     "child_process": "^1.0.2",
     "diff": "^4.0.1",
     "untildify": "^4.0.0",
