@@ -4,6 +4,7 @@ import * as vscode from "vscode";
 import * as util from "util";
 import * as cp from "child_process";
 import * as diff from "diff";
+import * as fs from "fs";
 import untildify = require('untildify');
 
 export const promiseExec = util.promisify(cp.exec);
@@ -57,7 +58,6 @@ export async function buildFormatCommand(path: string): Promise<string> {
     const margin = settings.get<number>("margin") || 92;
     const indent = settings.get<number>("indent") || 4;
     const alwaysForIn = settings.get<boolean>("alwaysForIn") || false;
-    const overwrite = settings.get<boolean>("overwrite") && true;
     const compile = settings.get<string>("compile") || "min";
     const whitespaceTypedefs = settings.get<boolean>("whitespaceTypedefs") || false;
     const whitespaceOpsInIndices = settings.get<boolean>("whitespaceOpsInIndices") || false;
@@ -78,7 +78,6 @@ export async function buildFormatCommand(path: string): Promise<string> {
     }
     const options = [
         style != "yas" ? `style = ${style},` : "",
-        overwrite ? "" : "overwrite = false,",
         indent != 4 ? `indent = ${indent},` : "",
         margin != 92 ? `margin = ${margin},` : "",
         alwaysForIn ? "always_for_in = true," : "",
@@ -90,12 +89,11 @@ export async function buildFormatCommand(path: string): Promise<string> {
         shortToLongFunctionDef ? "short_to_long_function_def = true," : "",
         alwaysUseReturn ? "always_use_return = true," : "",
         annotateUntypedFieldsWithAny ? "" : "annotate_untyped_fields_with_any = false,",
-    ].join(" ")
-    const epath = path.split('\\').join('\\\\');
-    return [
-        `${julia} --compile=${compile}`,
-        `-e "using JuliaFormatter; format(\\\"${epath}\\\"; ${options})"`
-    ].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
+    ].join(" ").trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
+    return (
+        `${julia} --compile=${compile}` + 
+        `-e 'using JuliaFormatter; content = String(read("${path}"); print(format_text(content; ${options}))'`
+    );
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
@@ -153,8 +151,10 @@ export async function formatFile(path: string): Promise<diff.Hunk[]> {
         progressBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -1);
         progressBar.text = "Formatting...";
         progressBar.show();
+        const origText = fs.readFileSync(path, 'utf8');
         const result = await promiseExec(command);
-        const parsed: diff.ParsedDiff[] = diff.parsePatch(result.stdout);
+        const patch = diff.createPatch(path, origText, result.stdout);
+        const parsed: diff.ParsedDiff[] = diff.parsePatch(patch);
         return parsed[0].hunks;
     } catch (err) {
         alertFormattingError(err);
