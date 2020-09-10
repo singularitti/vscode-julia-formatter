@@ -91,7 +91,7 @@ export async function buildFormatCommand(path: string): Promise<string> {
         annotateUntypedFieldsWithAny ? "" : "annotate_untyped_fields_with_any = false,",
     ].join(" ").trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
     return (
-        `${julia} --compile=${compile}` + 
+        `${julia} --compile=${compile}` +
         `-e 'using JuliaFormatter; content = String(read("${path}"); print(format_text(content; ${options}))'`
     );
 }
