@@ -32,11 +32,9 @@ This extension contributes the following settings:
 * `juliaFormatter.indent`: The number of spaces used for an indentation. `4` by default.
 * `juliaFormatter.alwaysForIn`: Always replaces `=` with `in` for `for` loops. For example,
   `for i = 1:10` will be transformed to `for i in 1:10`. `false` by default.
-* `juliaFormatter.overwrite`: Writes the formatted source to a new file where the original
-  filename is suffixed with _fmt, i.e. `filename_fmt.jl`. `true` by default.
-* `juliaFormatter.whitespaceTypedefs` : If `true` , whitespace is added for type
+* `juliaFormatter.whitespaceTypedefs` : If `true`, whitespace is added for type
   definitions. Make this `true` if you prefer `Union{A <: B, C}` to `Union{A<:B,C}` .
-* `juliaFormatter.whitespaceOpsInIndices` : If `true` , whitespace is added for binary
+* `juliaFormatter.whitespaceOpsInIndices` : If `true`, whitespace is added for binary
   operations in indices. Make this `true` if you prefer `arr[a + b]` to `arr[a+b]` .
 * `juliaFormatter.removeExtraNewlines`: If `true`, superflous newlines will be removed.
 * `juliaFormatter.importToUsing`: If `true`, `import` expressions are rewritten to `using`
