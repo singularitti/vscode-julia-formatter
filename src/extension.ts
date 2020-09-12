@@ -5,6 +5,7 @@ import * as util from "util";
 import * as cp from "child_process";
 import * as diff from "diff";
 import untildify = require('untildify');
+import { streamWrite, streamEnd, readableToString, onExit } from "@rauschma/stringio";
 
 export const promiseExec = util.promisify(cp.exec);
 export let registration: vscode.Disposable | undefined;
@@ -50,14 +51,12 @@ export async function getJulia(): Promise<string> {
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L54-L72
-export async function buildFormatCommand(path: string): Promise<string> {
-    const julia = await getJulia();
+export async function buildFormatArgs(): Promise<string[]> {
     const settings = vscode.workspace.getConfiguration("juliaFormatter");
     // Abbreviated to keep template string short
     const margin = settings.get<number>("margin") || 92;
     const indent = settings.get<number>("indent") || 4;
     const alwaysForIn = settings.get<boolean>("alwaysForIn") || false;
-    const overwrite = settings.get<boolean>("overwrite") && true;
     const compile = settings.get<string>("compile") || "min";
     const whitespaceTypedefs = settings.get<boolean>("whitespaceTypedefs") || false;
     const whitespaceOpsInIndices = settings.get<boolean>("whitespaceOpsInIndices") || false;
@@ -78,7 +77,6 @@ export async function buildFormatCommand(path: string): Promise<string> {
     }
     const options = [
         style != "yas" ? `style = ${style},` : "",
-        overwrite ? "" : "overwrite = false,",
         indent != 4 ? `indent = ${indent},` : "",
         margin != 92 ? `margin = ${margin},` : "",
         alwaysForIn ? "always_for_in = true," : "",
@@ -90,12 +88,23 @@ export async function buildFormatCommand(path: string): Promise<string> {
         shortToLongFunctionDef ? "short_to_long_function_def = true," : "",
         alwaysUseReturn ? "always_use_return = true," : "",
         annotateUntypedFieldsWithAny ? "" : "annotate_untyped_fields_with_any = false,",
-    ].join(" ")
-    const epath = path.split('\\').join('\\\\');
+    ].join(" ").trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
     return [
-        `${julia} --compile=${compile}`,
-        `-e "using JuliaFormatter; format(\\\"${epath}\\\"; ${options})"`
-    ].join(' ').trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
+        `--compile=${compile}`, '-e',
+        `using JuliaFormatter
+
+        function format_stdin()
+            data = UInt8[]
+            while !eof(stdin)
+                append!(data, readavailable(stdin))
+            end
+            append!(data, readavailable(stdin))
+            print(format_text(String(data); ${options}))
+        end
+
+        format_stdin()
+        `
+    ];
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
@@ -147,14 +156,26 @@ export async function alertFormattingError(
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L142-L152
-export async function formatFile(path: string): Promise<diff.Hunk[]> {
-    const command: string = await buildFormatCommand(path);
+export async function format(path: string, content: string): Promise<diff.Hunk[]> {
+    const julia = await getJulia();
+    const args: string[] = await buildFormatArgs();
     try {
         progressBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -1);
         progressBar.text = "Formatting...";
         progressBar.show();
-        const result = await promiseExec(command);
-        const parsed: diff.ParsedDiff[] = diff.parsePatch(result.stdout);
+        const juliaFormatter = cp.spawn(julia, args);
+
+        await streamWrite(juliaFormatter.stdin, content);
+        await streamEnd(juliaFormatter.stdin);
+
+        const formattedContent = await readableToString(juliaFormatter.stdout);
+
+        // TODO: capture stderr output from JuliaFormatter on error
+        await onExit(juliaFormatter);
+
+        // It would be nicer if we could combine these two lines somehow
+        const patch = diff.createPatch(path, content, formattedContent);
+        const parsed: diff.ParsedDiff[] = diff.parsePatch(patch);
         return parsed[0].hunks;
     } catch (err) {
         alertFormattingError(err);
@@ -163,6 +184,8 @@ export async function formatFile(path: string): Promise<diff.Hunk[]> {
         progressBar.dispose();
     }
 }
+
+
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L159-L180
 export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
@@ -191,7 +214,7 @@ export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
 export function activate(context: vscode.ExtensionContext) {
     vscode.languages.registerDocumentFormattingEditProvider('julia', {
         provideDocumentFormattingEdits(document: vscode.TextDocument): Promise<vscode.TextEdit[]> {
-            return formatFile(document.fileName).then(hunksToEdits);
+            return format(document.fileName, document.getText()).then(hunksToEdits);
         }
     });
 }
