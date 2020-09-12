@@ -43,3 +43,8 @@ Thanks to @friggog in #10
 
 - Fix [`alwaysForIn` not working #14](https://github.com/singularitti/vscode-julia-formatter/issues/14)
 - Fix `progressBar` will still show even if formatting fails
+
+### 0.3.0
+
+- Merge #19 & fixes #5, #12, #15, #16, no formatting does not cause losing changes
+- Remove `juliaFormatter.overwrite` option since people almost always wanted to overwrite
