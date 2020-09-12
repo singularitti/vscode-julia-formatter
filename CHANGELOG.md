@@ -1,6 +1,7 @@
 # Change Log
 
-All notable changes to the "vscode-julia-formatter" extension will be documented in this file.
+All notable changes to the "vscode-julia-formatter" extension will be documented
+in this file.
 
 ## 0.0.1
 
@@ -12,7 +13,8 @@ All notable changes to the "vscode-julia-formatter" extension will be documented
 
 ## 0.0.3
 
-- Add 3 more properties: `compile`, `whitespace_typedefs` and `whitespace_ops_in_indices`
+- Add 3 more properties: `compile`, `whitespace_typedefs` and
+  `whitespace_ops_in_indices`
 - Simplify code, should improve performance.
 
 ## 0.0.4
@@ -36,15 +38,19 @@ Thanks to @friggog in #10
 
 ### 0.2.1
 
-- Add option `annotateUntypedFieldsWithAny` introduced in `JuliaFormatter.jl v0.6.3`
+- Add option `annotateUntypedFieldsWithAny` introduced in
+  `JuliaFormatter.jl v0.6.3`
 - Fix a bug that `alwaysForIn` & `overwrite` do not work properly
 
 ### 0.2.2
 
-- Fix [`alwaysForIn` not working #14](https://github.com/singularitti/vscode-julia-formatter/issues/14)
+- Fix
+  [`alwaysForIn` not working #14](https://github.com/singularitti/vscode-julia-formatter/issues/14)
 - Fix `progressBar` will still show even if formatting fails
 
 ### 0.3.0
 
-- Merge #19 & fixes #5, #12, #15, #16, no formatting does not cause losing changes
-- Remove `juliaFormatter.overwrite` option since people almost always wanted to overwrite
+- Merge #19 & fixes #5, #12, #15, #16, no formatting does not cause losing
+  changes
+- Remove `juliaFormatter.overwrite` option since people almost always wanted to
+  overwrite
