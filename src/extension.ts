@@ -5,7 +5,8 @@ import * as util from "util";
 import * as cp from "child_process";
 import * as diff from "diff";
 import untildify = require('untildify');
-import { streamWrite, streamEnd, readableToString, onExit } from "@rauschma/stringio";
+import { streamWrite, streamEnd, readableToString } from "@rauschma/stringio";
+import { onExit } from './on-exit';
 
 export const promiseExec = util.promisify(cp.exec);
 export let registration: vscode.Disposable | undefined;
