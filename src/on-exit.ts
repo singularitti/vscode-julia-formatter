@@ -11,7 +11,7 @@ export async function onExit(childProcess: cp.ChildProcess) {
             }
             else {
                 if (childProcess.stderr === null) {
-                    reject(new Error('Exit with error code: ' + code));                    
+                    reject(new Error('Exit with error code: ' + code));
                 } else {
                     const errorOutput = await readableToString(childProcess.stderr);
                     reject(new Error('Exit with error code: ' + code + '\n' + errorOutput));
