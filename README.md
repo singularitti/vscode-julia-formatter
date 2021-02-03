@@ -46,7 +46,7 @@ This extension contributes the following settings:
   expression where applicable in function definitions, macro definitions, and do blocks.
 * `juliaFormatter.compile`: Control the compilation level of Julia. Available values are
   'min' or 'all'.
-* `juliaFormatter.style`: Formatting styles. Choose from: `'default'` and `'yas'`.
+* `juliaFormatter.style`: Formatting styles. Choose from: `'default'`, `'yas'`, and `'blue'`.
 * `juliaFormatter.annotateUntypedFieldsWithAny`: If `true`, Annotates fields in a type
   definitions with `::Any` if no type annotation is provided (Requires
   `JuliaFormatter.jl v0.6.3`).

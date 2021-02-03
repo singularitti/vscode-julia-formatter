@@ -62,9 +62,10 @@
           "default": "default",
           "enum": [
             "default",
-            "yas"
+            "yas",
+            "blue"
           ],
-          "description": "Formatting styles. Choose from: `'default'` and `'yas'`."
+          "description": "Formatting styles. Choose from: `'default'`, `'yas'`, and `'blue`'."
         },
         "juliaFormatter.whitespaceTypedefs": {
           "type": "boolean",
