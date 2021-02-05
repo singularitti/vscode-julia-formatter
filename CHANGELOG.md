@@ -48,3 +48,7 @@ Thanks to @friggog in #10
 
 - Merge #19 & fixes #5, #12, #15, #16, no formatting does not cause losing changes
 - Remove `juliaFormatter.overwrite` option since people almost always wanted to overwrite
+
+### 0.4.0
+
+- Merge #30 & #31: adding `BlueStyle` option
