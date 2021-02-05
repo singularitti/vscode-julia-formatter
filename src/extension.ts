@@ -67,6 +67,7 @@ export async function buildFormatArgs(): Promise<string[]> {
     const shortToLongFunctionDef = settings.get<boolean>("shortToLongFunctionDef") || false;
     const alwaysUseReturn = settings.get<boolean>("alwaysUseReturn") || false;
     const annotateUntypedFieldsWithAny = settings.get<boolean>("annotateUntypedFieldsWithAny") && true;
+    const overwriteFlags = settings.get<boolean>("overwriteFlags") || false;
     let style: string;
     switch (settings.get<string>("style")) {
         case "yas":
@@ -79,7 +80,20 @@ export async function buildFormatArgs(): Promise<string[]> {
             style = "DefaultStyle()";
             break;
     }
-    const options = [
+    const options = (overwriteFlags ? [
+        style != "yas" ? `style = ${style},` : "",
+        `indent = ${indent},`,
+        `margin = ${margin},`,
+        `always_for_in = ${alwaysForIn},`,
+        `whitespace_typedefs = ${whitespaceTypedefs},`,
+        `whitespace_ops_in_indices = ${whitespaceOpsInIndices},`,
+        `remove_extra_newlines = ${removeExtraNewlines},`,
+        `import_to_using = ${importToUsing},`,
+        `pipe_to_function_call = ${pipeToFunctionCall},`,
+        `short_to_long_function_def = ${shortToLongFunctionDef},`,
+        `always_use_return = ${alwaysUseReturn},`,
+        `annotate_untyped_fields_with_any = ${annotateUntypedFieldsWithAny},`,
+    ] : [
         style != "yas" ? `style = ${style},` : "",
         indent != 4 ? `indent = ${indent},` : "",
         margin != 92 ? `margin = ${margin},` : "",
@@ -92,7 +106,7 @@ export async function buildFormatArgs(): Promise<string[]> {
         shortToLongFunctionDef ? "short_to_long_function_def = true," : "",
         alwaysUseReturn ? "always_use_return = true," : "",
         annotateUntypedFieldsWithAny ? "" : "annotate_untyped_fields_with_any = false,",
-    ].join(" ").trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
+    ]).join(" ").trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
     return [
         `--compile=${compile}`, '-e',
         `using JuliaFormatter
