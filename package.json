@@ -33,6 +33,11 @@
       "type": "object",
       "title": "Julia Formatter configuration",
       "properties": {
+        "juliaFormatter.overwriteFlags": {
+          "type": "boolean",
+          "default": false,
+          "description": "If true accepts flag values passed from vs-code interface rather than default values of specified style."
+        },
         "juliaFormatter.margin": {
           "type": "number",
           "default": 92,
