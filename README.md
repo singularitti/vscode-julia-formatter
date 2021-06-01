@@ -28,8 +28,9 @@ package. They differ by some decisions.
 
 This extension contributes the following settings:
 
-- `juliaFormatter.overwriteFlags`: Whether to overwrite the settings of the specified
-  style with the JuliaFormatter flags specified in vs-code's settings. `false` by default.
+- `juliaFormatter.overwriteFlags`: Whether to overwrite the settings of the
+  specified style with the JuliaFormatter flags specified in vs-code's settings.
+  `false` by default.
 - `juliaFormatter.style`: Formatting styles. Choose from: `'default'`, `'yas'`,
   and `'blue'`.
 - `juliaFormatter.compile`: Control the compilation level of Julia. Available
@@ -60,29 +61,29 @@ This extension contributes the following settings:
 - `juliaFormatter.alwaysUseReturn`: If `true`, `return` will be prepended to the
   last expression where applicable in function definitions, macro definitions,
   and do blocks.
-- `juliaFormatter.whitespaceInKwargs`: If `true`, `=` in keyword arguments will be
-  surrounded by whitespace.
+- `juliaFormatter.whitespaceInKwargs`: If `true`, `=` in keyword arguments will
+  be surrounded by whitespace.
 - `juliaFormatter.annotateUntypedFieldsWithAny`: If `true`, Annotates fields in
   a type definitions with `::Any` if no type annotation is provided (Requires
   `JuliaFormatter.jl v0.6.3`).
-- `juliaFormatter.formatDocstrings`: If `true`, format code docstrings with the same
-  options used for the code source.
-- `juliaFormatter.alignAssignment`: If `true`, align to `=`-like operators. This covers
-  variable assignments and short definition functions.
-- `juliaFormatter.alignStructField`: If `true`, align struct field definitions to `::`
-  or `=` - whichever has higher precedence.
-- `juliaFormatter.alignConditional`: If `true`, align conditional expressions to either
-  `?`, `:`, or both.
+- `juliaFormatter.formatDocstrings`: If `true`, format code docstrings with the
+  same options used for the code source.
+- `juliaFormatter.alignAssignment`: If `true`, align to `=`-like operators. This
+  covers variable assignments and short definition functions.
+- `juliaFormatter.alignStructField`: If `true`, align struct field definitions
+  to `::` or `=` - whichever has higher precedence.
+- `juliaFormatter.alignConditional`: If `true`, align conditional expressions to
+  either `?`, `:`, or both.
 - `juliaFormatter.alignPairArrow`: If `true`, align pair arrows (`=>`).
 - `juliaFormatter.systemImagePath`: The path to the
   [sysimage](https://julialang.github.io/PackageCompiler.jl/dev/sysimages/#sysimages-1)
-  to use when launching the Julia process that will format a file. If empty, no sysimage
-  will be used. Read the
+  to use when launching the Julia process that will format a file. If empty, no
+  sysimage will be used. Read the
   [PackageCompiler.jl](https://julialang.github.io/PackageCompiler.jl/dev/)
-  documentation to learn why and how to create a sysimage. (Tl;dr a sysimage is a
-  snapshot of the compiled functions in a Julia session, which can be reused to nearly
-  eliminate the long compilation times Julia tends to suffer from. Using a sysimage can
-  vastly reduce the time it takes to format files.)
+  documentation to learn why and how to create a sysimage. (Tl;dr a sysimage is
+  a snapshot of the compiled functions in a Julia session, which can be reused
+  to nearly eliminate the long compilation times Julia tends to suffer from.
+  Using a sysimage can vastly reduce the time it takes to format files.)
 
 For more detailed explanation of these settings, please go to
 [its official docs](https://domluna.github.io/JuliaFormatter.jl/stable/).
