@@ -52,3 +52,8 @@ Thanks to @friggog in #10
 ### 0.4.0
 
 - Merge #30 & #31: adding `BlueStyle` option
+
+### 0.5.0
+
+- Closes #32, merge #33: Add overwrite flags
+- Merge #37: Add the latest formatting options
