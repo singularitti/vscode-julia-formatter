@@ -73,7 +73,7 @@ export async function buildFormatArgs(): Promise<string[]> {
         case "yas":
             style = "YASStyle()";
             break;
-	case "blue":
+        case "blue":
             style = "BlueStyle()";
             break;
         default:
