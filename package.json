@@ -12,7 +12,7 @@
     "url": "https://github.com/singularitti/vscode-julia-formatter/issues"
   },
   "description": "A formatter for the Julia language",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "engines": {
     "vscode": "^1.40.0"
   },
@@ -36,7 +36,7 @@
         "juliaFormatter.overwriteFlags": {
           "type": "boolean",
           "default": false,
-          "description": "If true accepts flag values passed from vs-code interface rather than default values of specified style."
+          "description": "If `true`, accepts flag values passed from vs-code interface rather than default values of specified style."
         },
         "juliaFormatter.margin": {
           "type": "number",
@@ -111,6 +111,51 @@
           "type": "boolean",
           "default": true,
           "description": "If `true`, Annotates fields in a type definitions with `::Any` if no type annotation is provided (Requires `JuliaFormatter.jl v0.6.3`)."
+        },
+        "juliaFormatter.whitespaceInKwargs": {
+          "type": "boolean",
+          "default": true,
+          "description": "If `true`, `=` in keyword arguments will be surrounded by whitespace."
+        },
+        "juliaFormatter.formatDocstrings": {
+          "type": "boolean",
+          "default": false,
+          "description": "Format code docstrings with the same options used for the code source."
+        },
+        "juliaFormatter.alignStructField": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, align struct field definitions to `::` or `=`, whichever has higher precedence."
+        },
+        "juliaFormatter.alignConditional": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, align conditional expressions to either `?`, `:`, or both."
+        },
+        "juliaFormatter.alignAssignment": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, align an assignment expression."
+        },
+        "juliaFormatter.alignPairArrow": {
+          "type": "boolean",
+          "default": false,
+          "description": "If `true`, align pair arrows `(=>)`."
+        },
+        "juliaFormatter.conditionalToIf": {
+          "type": "boolean",
+          "default": false,
+          "description": "If the conditional `E ? A : B` exceeds the maximum margin converts it into the equivalent `if` block."
+        },
+        "juliaFormatter.normalizeLineEndings": {
+          "type": "string",
+          "default": "auto",
+          "enum": [
+            "auto",
+            "unix",
+            "windows"
+          ],
+          "description": "Normalize line endings."
         }
       }
     }

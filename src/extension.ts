@@ -67,13 +67,21 @@ export async function buildFormatArgs(): Promise<string[]> {
     const shortToLongFunctionDef = settings.get<boolean>("shortToLongFunctionDef") || false;
     const alwaysUseReturn = settings.get<boolean>("alwaysUseReturn") || false;
     const annotateUntypedFieldsWithAny = settings.get<boolean>("annotateUntypedFieldsWithAny") && true;
+    const whitespaceInKwargs = settings.get<boolean>("whitespaceInKwargs") && true;
+    const formatDocstrings = settings.get<boolean>("formatDocstrings") || false;
+    const alignStructField = settings.get<boolean>("alignStructField") || false;
+    const alignConditional = settings.get<boolean>("alignConditional") || false;
+    const alignAssignment = settings.get<boolean>("alignAssignment") || false;
+    const alignPairArrow = settings.get<boolean>("alignPairArrow") || false;
+    const conditionalToIf = settings.get<boolean>("conditionalToIf") || false;
     const overwriteFlags = settings.get<boolean>("overwriteFlags") || false;
+    const normalizeLineEndings = settings.get<boolean>("normalizeLineEndings") || "auto";
     let style: string;
     switch (settings.get<string>("style")) {
         case "yas":
             style = "YASStyle()";
             break;
-	case "blue":
+        case "blue":
             style = "BlueStyle()";
             break;
         default:
@@ -93,6 +101,14 @@ export async function buildFormatArgs(): Promise<string[]> {
         `short_to_long_function_def = ${shortToLongFunctionDef},`,
         `always_use_return = ${alwaysUseReturn},`,
         `annotate_untyped_fields_with_any = ${annotateUntypedFieldsWithAny},`,
+        `whitespace_in_kwargs = ${whitespaceInKwargs},`,
+        `format_docstrings = ${formatDocstrings},`,
+        `align_struct_field = ${alignStructField},`,
+        `align_conditional = ${alignConditional},`,
+        `align_assignment = ${alignAssignment},`,
+        `align_pair_arrow = ${alignPairArrow},`,
+        `conditional_to_if = ${conditionalToIf},`,
+        normalizeLineEndings != "auto" ? `normalize_line_endings = ${normalizeLineEndings},` : "",
     ] : [
         style != "yas" ? `style = ${style},` : "",
         indent != 4 ? `indent = ${indent},` : "",
@@ -106,6 +122,14 @@ export async function buildFormatArgs(): Promise<string[]> {
         shortToLongFunctionDef ? "short_to_long_function_def = true," : "",
         alwaysUseReturn ? "always_use_return = true," : "",
         annotateUntypedFieldsWithAny ? "" : "annotate_untyped_fields_with_any = false,",
+        whitespaceInKwargs ? "" : "whitespace_in_kwargs = false,",
+        formatDocstrings ? "format_docstrings = true," : "",
+        alignStructField ? "align_struct_field = true," : "",
+        alignConditional ? "align_conditional = true," : "",
+        alignAssignment ? "align_assignment = true," : "",
+        alignPairArrow ? "align_pair_arrow = true," : "",
+        conditionalToIf ? "conditional_to_if = true," : "",
+        normalizeLineEndings != "auto" ? `normalize_line_endings = ${normalizeLineEndings},` : "",
     ]).join(" ").trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
     return [
         `--compile=${compile}`, '-e',
