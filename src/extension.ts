@@ -218,20 +218,23 @@ export async function format(path: string, content: string): Promise<diff.Hunk[]
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L159-L180
 export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
 	return hunks.map((hunk): vscode.TextEdit => {
-		const startPos = new vscode.Position(hunk.newStart - 1, 0);
+		const nLines = hunk.lines.length;
+		const startPos = new vscode.Position(hunk.oldStart - 1, 0);
 		const endPos = new vscode.Position(
-			hunk.newStart - 1 + hunk.oldLines - 1,
-			hunk.lines[hunk.lines.length - 1].length - 1,
+			hunk.oldStart - 1 + hunk.oldLines - 1,
+			hunk.lines[nLines - 1].length,
 		);
 		const editRange = new vscode.Range(startPos, endPos);
 
 		const newTextLines = hunk.lines
+			.map((line, index) =>
+				index < nLines - 1 ? line.concat(hunk.linedelimiters[index]) : line,
+			)
 			.filter((line): boolean => line.charAt(0) === " " || line.charAt(0) === "+")
 			.map((line): string => line.substr(1));
-		const lineEndChar: string = hunk.linedelimiters[0];
-		const newText = newTextLines.join(lineEndChar);
+		const newText = newTextLines.join("");
 
-		return new vscode.TextEdit(editRange, newText);
+		return vscode.TextEdit.replace(editRange, newText);
 	});
 }
 
