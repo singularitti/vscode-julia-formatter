@@ -16,9 +16,11 @@ package. They differ by some decisions.
 2. Though this extension will try to install it, we still recommend that you
    install [`JuliaFormatter.jl`](https://github.com/domluna/JuliaFormatter.jl)
    before installing this extension. To do this, open the REPL and type
+
    ```julia
    ]add JuliaFormatter
    ```
+
    It is better to install the latest version of `JuliaFormatter`, since some
    settings require that.
 
@@ -59,6 +61,14 @@ This extension contributes the following settings:
 - `juliaFormatter.annotateUntypedFieldsWithAny`: If `true`, Annotates fields in
   a type definitions with `::Any` if no type annotation is provided (Requires
   `JuliaFormatter.jl v0.6.3`).
+- `juliaFormatter.systemImagePath`: The path to the
+  [sysimage](https://julialang.github.io/PackageCompiler.jl/dev/sysimages/#sysimages-1)
+  to use when launching the Julia process that will format a file. If empty, no sysimage
+  will be used. Read the
+  [PackageCompiler.jl](https://julialang.github.io/PackageCompiler.jl/dev/)
+  documentation to learn why and how to create a sysimage. (Tl;dr a sysimage is a
+  snapshot of the compiled functions in a Julia session, which can be reused to nearly
+  eliminate the long compilation times Julia tends to suffer from.)
 
 For more detailed explanation of these settings, please go to
 [its official docs](https://domluna.github.io/JuliaFormatter.jl/stable/).
