@@ -290,7 +290,6 @@ tmtags
 
 ### VisualStudioCode ###
 .vscode/*
-*.vsix
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
