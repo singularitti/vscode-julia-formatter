@@ -12,7 +12,7 @@
     "url": "https://github.com/singularitti/vscode-julia-formatter/issues"
   },
   "description": "A formatter for the Julia language",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "engines": {
     "vscode": "^1.40.0"
   },
