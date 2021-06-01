@@ -211,7 +211,7 @@ export async function format(path: string, content: string): Promise<diff.Hunk[]
 		alertFormattingError(err);
 		throw err;
 	} finally {
-		progressBar.dispose();
+		progressBar.hide();
 	}
 }
 
