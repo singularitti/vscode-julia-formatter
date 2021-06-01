@@ -220,19 +220,18 @@ export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
 	return hunks.map((hunk): vscode.TextEdit => {
 		const nLines = hunk.lines.length;
 		const startPos = new vscode.Position(hunk.oldStart - 1, 0);
-		const endPos = new vscode.Position(
-			hunk.oldStart - 1 + hunk.oldLines - 1,
-			hunk.lines[nLines - 1].length,
-		);
+		const endPos = new vscode.Position(hunk.oldStart - 1 + hunk.oldLines, 0);
 		const editRange = new vscode.Range(startPos, endPos);
 
-		const newTextLines = hunk.lines
-			.map((line, index) =>
-				index < nLines - 1 ? line.concat(hunk.linedelimiters[index]) : line,
-			)
-			.filter((line): boolean => line.charAt(0) === " " || line.charAt(0) === "+")
-			.map((line): string => line.substr(1));
-		const newText = newTextLines.join("");
+		const newTextFragments: string[] = [];
+		for (let i = 0; i < nLines; i++) {
+			const line = hunk.lines[i];
+			const firstChar = line.charAt(0);
+			if (firstChar === " " || firstChar === "+") {
+				newTextFragments.push(line.substr(1), hunk.linedelimiters[i]);
+			}
+		}
+		const newText = newTextFragments.join("");
 
 		return vscode.TextEdit.replace(editRange, newText);
 	});
