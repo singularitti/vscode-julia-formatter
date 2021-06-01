@@ -60,6 +60,26 @@ This extension contributes the following settings:
   a type definitions with `::Any` if no type annotation is provided (Requires
   `JuliaFormatter.jl v0.6.3`).
 
+The following features require the latest version of `JuliaFormatter.jl`:
+
+- `juliaFormatter.overwriteFlags`: If `true`, accepts flag values passed from
+  vs-code interface rather than default values of specified style. See [this
+  issue](https://github.com/singularitti/vscode-julia-formatter/issues/32) for
+  more details.
+- `juliaFormatter.whitespaceInKwargs`: If `true`, `=` in keyword arguments will
+  be surrounded by whitespace.
+- `juliaFormatter.formatDocstrings`: Format code docstrings with the same
+  options used for the code source.
+- `juliaFormatter.alignStructField`: If `true`, align struct field definitions
+  to `::` or `=`, whichever has higher precedence.
+- `juliaFormatter.alignConditional`: If `true`, align conditional expressions to
+  either `?`, `:`, or both.
+- `juliaFormatter.alignAssignment`: If `true`, align an assignment expression.
+- `juliaFormatter.alignPairArrow`: If `true`, align pair arrows `(=>)`.
+- `juliaFormatter.conditionalToIf`: If the conditional `E ? A : B` exceeds the
+  maximum margin converts it into the equivalent `if` block.
+- `juliaFormatter.normalizeLineEndings`: Normalize line endings.
+
 For more detailed explanation of these settings, please go to
 [its official docs](https://domluna.github.io/JuliaFormatter.jl/stable/).
 
