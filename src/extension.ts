@@ -1,22 +1,28 @@
-'use strict';
+"use strict";
 
 import * as vscode from "vscode";
 import * as util from "util";
 import * as cp from "child_process";
 import * as diff from "diff";
-import untildify = require('untildify');
+import untildify = require("untildify");
 import { streamWrite, streamEnd, readableToString } from "@rauschma/stringio";
-import { onExit } from './on-exit';
+import { onExit } from "./on-exit";
 
 export const promiseExec = util.promisify(cp.exec);
 export let registration: vscode.Disposable | undefined;
 
 let progressBar: vscode.StatusBarItem;
 
+let outputChannel = vscode.window.createOutputChannel("Julia Formatter");
+outputChannel.show();
+outputChannel.appendLine("Initializing Julia Formatter extension");
+
 export async function getJulia(): Promise<string> {
     // From https://github.com/julia-vscode/julia-vscode/blob/dd94db5/src/settings.ts#L8-L14
-    let section = vscode.workspace.getConfiguration('julia');
-    let jlpath = section ? untildify(section.get<string>('executablePath', 'julia')) : null;
+    let section = vscode.workspace.getConfiguration("julia");
+    let jlpath = section
+        ? untildify(section.get<string>("executablePath", "julia"))
+        : null;
     if (jlpath === "") {
         jlpath = null;
     }
@@ -53,100 +59,81 @@ export async function getJulia(): Promise<string> {
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L54-L72
 export async function buildFormatArgs(): Promise<string[]> {
-    const settings = vscode.workspace.getConfiguration("juliaFormatter");
-    // Abbreviated to keep template string short
-    const margin = settings.get<number>("margin") || 92;
-    const indent = settings.get<number>("indent") || 4;
-    const alwaysForIn = settings.get<boolean>("alwaysForIn") || false;
-    const compile = settings.get<string>("compile") || "min";
-    const whitespaceTypedefs = settings.get<boolean>("whitespaceTypedefs") || false;
-    const whitespaceOpsInIndices = settings.get<boolean>("whitespaceOpsInIndices") || false;
-    const removeExtraNewlines = settings.get<boolean>("removeExtraNewlines") || false;
-    const importToUsing = settings.get<boolean>("importToUsing") || false;
-    const pipeToFunctionCall = settings.get<boolean>("pipeToFunctionCall") || false;
-    const shortToLongFunctionDef = settings.get<boolean>("shortToLongFunctionDef") || false;
-    const alwaysUseReturn = settings.get<boolean>("alwaysUseReturn") || false;
-    const annotateUntypedFieldsWithAny = settings.get<boolean>("annotateUntypedFieldsWithAny") && true;
-    const whitespaceInKwargs = settings.get<boolean>("whitespaceInKwargs") && true;
-    const formatDocstrings = settings.get<boolean>("formatDocstrings") || false;
-    const alignStructField = settings.get<boolean>("alignStructField") || false;
-    const alignConditional = settings.get<boolean>("alignConditional") || false;
-    const alignAssignment = settings.get<boolean>("alignAssignment") || false;
-    const alignPairArrow = settings.get<boolean>("alignPairArrow") || false;
-    const conditionalToIf = settings.get<boolean>("conditionalToIf") || false;
-    const overwriteFlags = settings.get<boolean>("overwriteFlags") || false;
-    const normalizeLineEndings = settings.get<boolean>("normalizeLineEndings") || "auto";
-    let style: string;
-    switch (settings.get<string>("style")) {
-        case "yas":
-            style = "YASStyle()";
-            break;
-        case "blue":
-            style = "BlueStyle()";
-            break;
-        default:
-            style = "DefaultStyle()";
-            break;
-    }
-    const options = (overwriteFlags ? [
-        style != "yas" ? `style = ${style},` : "",
-        `indent = ${indent},`,
-        `margin = ${margin},`,
-        `always_for_in = ${alwaysForIn},`,
-        `whitespace_typedefs = ${whitespaceTypedefs},`,
-        `whitespace_ops_in_indices = ${whitespaceOpsInIndices},`,
-        `remove_extra_newlines = ${removeExtraNewlines},`,
-        `import_to_using = ${importToUsing},`,
-        `pipe_to_function_call = ${pipeToFunctionCall},`,
-        `short_to_long_function_def = ${shortToLongFunctionDef},`,
-        `always_use_return = ${alwaysUseReturn},`,
-        `annotate_untyped_fields_with_any = ${annotateUntypedFieldsWithAny},`,
-        `whitespace_in_kwargs = ${whitespaceInKwargs},`,
-        `format_docstrings = ${formatDocstrings},`,
-        `align_struct_field = ${alignStructField},`,
-        `align_conditional = ${alignConditional},`,
-        `align_assignment = ${alignAssignment},`,
-        `align_pair_arrow = ${alignPairArrow},`,
-        `conditional_to_if = ${conditionalToIf},`,
-        normalizeLineEndings != "auto" ? `normalize_line_endings = ${normalizeLineEndings},` : "",
-    ] : [
-        style != "yas" ? `style = ${style},` : "",
-        indent != 4 ? `indent = ${indent},` : "",
-        margin != 92 ? `margin = ${margin},` : "",
-        alwaysForIn ? "always_for_in = true," : "",
-        whitespaceTypedefs ? "whitespace_typedefs = true," : "",
-        whitespaceOpsInIndices ? "whitespace_ops_in_indices = true," : "",
-        removeExtraNewlines ? "remove_extra_newlines = true," : "",
-        importToUsing ? "import_to_using = true," : "",
-        pipeToFunctionCall ? "pipe_to_function_call = true," : "",
-        shortToLongFunctionDef ? "short_to_long_function_def = true," : "",
-        alwaysUseReturn ? "always_use_return = true," : "",
-        annotateUntypedFieldsWithAny ? "" : "annotate_untyped_fields_with_any = false,",
-        whitespaceInKwargs ? "" : "whitespace_in_kwargs = false,",
-        formatDocstrings ? "format_docstrings = true," : "",
-        alignStructField ? "align_struct_field = true," : "",
-        alignConditional ? "align_conditional = true," : "",
-        alignAssignment ? "align_assignment = true," : "",
-        alignPairArrow ? "align_pair_arrow = true," : "",
-        conditionalToIf ? "conditional_to_if = true," : "",
-        normalizeLineEndings != "auto" ? `normalize_line_endings = ${normalizeLineEndings},` : "",
-    ]).join(" ").trim().replace(/\s+/, ' '); // Remove extra whitespace (helps with tests)
-    return [
-        `--compile=${compile}`, '-e',
-        `using JuliaFormatter
+	const settings = vscode.workspace.getConfiguration("juliaFormatter");
 
-        function format_stdin()
-            data = UInt8[]
-            while !eof(stdin)
-                append!(data, readavailable(stdin))
-            end
-            append!(data, readavailable(stdin))
-            print(format_text(String(data); ${options}))
-        end
+	const overwriteFlags = settings.get<boolean>("overwriteFlags") as boolean;
+	const compile = settings.get<string>("compile") as string;
+	const margin = settings.get<number>("margin") as number;
+	const indent = settings.get<number>("indent") as number;
 
-        format_stdin()
-        `
-    ];
+	const formattingFlagsKeyMap = {
+		alwaysForIn: "always_for_in",
+		whitespaceTypedefs: "whitespace_typedefs",
+		whitespaceOpsInIndices: "whitespace_ops_in_indices",
+		removeExtraNewlines: "remove_extra_newlines",
+		importToUsing: "import_to_using",
+		pipeToFunctionCall: "pipe_to_function_call",
+		shortToLongFunctionDef: "short_to_long_function_def",
+		alwaysUseReturn: "always_use_return",
+		whitespaceInKwargs: "whitespace_in_kwargs",
+		annotateUntypedFieldsWithAny: "annotate_untyped_fields_with_any",
+		formatDocstrings: "format_docstrings",
+		alignAssignment: "align_assignment",
+		alignStructField: "align_struct_field",
+		alignConditional: "align_conditional",
+		alignPairArrow: "align_pair_arrow",
+	};
+
+	let style: string;
+	switch (settings.get<string>("style")) {
+		case "yas":
+			style = "YASStyle()";
+			break;
+		case "blue":
+			style = "BlueStyle()";
+			break;
+		default:
+			style = "DefaultStyle()";
+			break;
+	}
+	const optionsList = [
+		`style = ${style}`,
+		`indent = ${indent}`,
+		`margin = ${margin}`,
+		...(overwriteFlags
+			? Object.entries(formattingFlagsKeyMap).map(([jsKey, juliaKwarg]) => {
+					// All flags have defaults set in package.json, so this can't return undefined
+					const value = settings.get<boolean>(jsKey) as boolean;
+
+					// JS and Julia use the same representation for `true` and `false`
+					return `${juliaKwarg}=${value}`;
+			  })
+			: []),
+	];
+
+	// Remove extra whitespace (helps with tests)
+	const options = optionsList.join(",").trim().replace(/\s+/, " ");
+
+	const sysimagePath = settings.get<string>("sysimagePath") as string;
+	const systemImageArgs = sysimagePath.length > 0 ? ["--sysimage", sysimagePath] : [];
+
+	const cmdArgs = [
+		`--compile=${compile}`,
+		...systemImageArgs,
+		"-e",
+		`using JuliaFormatter
+
+		function format_stdin()
+			print(format_text(String(read(stdin)); ${options}))
+		end
+
+		format_stdin()
+		`,
+	];
+
+	outputChannel.appendLine(`Running Julia with args: ${JSON.stringify(cmdArgs)}`);
+
+	return cmdArgs;
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
