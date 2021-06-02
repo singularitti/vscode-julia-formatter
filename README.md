@@ -29,11 +29,11 @@ package. They differ by some decisions.
 This extension contributes the following settings:
 
 - `juliaFormatter.overwriteFlags`: Whether to overwrite the settings of the specified
-  style with the JuliaFormatter flags specified in vs-code's settings. `false` by default.
+  style with the `JuliaFormatter` flags specified in vs-code's settings. `false` by default.
 - `juliaFormatter.style`: Formatting styles. Choose from: `'default'`, `'yas'`,
   and `'blue'`.
 - `juliaFormatter.compile`: Control the compilation level of Julia. Available
-  values are 'min' or 'all'.
+  values are `'min'` or `'all'`.
 - `juliaFormatter.margin`: The maximum number of characters of code on a single
   line. Lines over the limit will be wrapped if possible. There are cases where
   lines cannot be wrapped and they will still end up wider than the requested
@@ -45,10 +45,10 @@ This extension contributes the following settings:
   default.
 - `juliaFormatter.whitespaceTypedefs` : If `true`, whitespace is added for type
   definitions. Make this `true` if you prefer `Union{A <: B, C}` to
-  `Union{A<:B,C}` .
+  `Union{A<:B,C}`.
 - `juliaFormatter.whitespaceOpsInIndices` : If `true`, whitespace is added for
   binary operations in indices. Make this `true` if you prefer `arr[a + b]` to
-  `arr[a+b]` .
+  `arr[a+b]`.
 - `juliaFormatter.removeExtraNewlines`: If `true`, superflous newlines will be
   removed.
 - `juliaFormatter.importToUsing`: If `true`, `import` expressions are rewritten
@@ -67,13 +67,16 @@ This extension contributes the following settings:
   `JuliaFormatter.jl v0.6.3`).
 - `juliaFormatter.formatDocstrings`: If `true`, format code docstrings with the same
   options used for the code source.
-- `juliaFormatter.alignAssignment`: If `true`, align to `=`-like operators. This covers
+- `juliaFormatter.alignAssignment`: If `true`, align the `=`-like operators. This covers
   variable assignments and short definition functions.
 - `juliaFormatter.alignStructField`: If `true`, align struct field definitions to `::`
-  or `=` - whichever has higher precedence.
+  or `=`, whichever has higher precedence.
 - `juliaFormatter.alignConditional`: If `true`, align conditional expressions to either
   `?`, `:`, or both.
 - `juliaFormatter.alignPairArrow`: If `true`, align pair arrows (`=>`).
+- `juliaFormatter.conditionalToIf`: If the conditional `E ? A : B` exceeds the
+  maximum margin converts it into the equivalent `if` block.
+- `juliaFormatter.normalizeLineEndings`: Normalize line endings.
 - `juliaFormatter.systemImagePath`: The path to the
   [sysimage](https://julialang.github.io/PackageCompiler.jl/dev/sysimages/#sysimages-1)
   to use when launching the Julia process that will format a file. If empty, no sysimage
@@ -83,26 +86,6 @@ This extension contributes the following settings:
   snapshot of the compiled functions in a Julia session, which can be reused to nearly
   eliminate the long compilation times Julia tends to suffer from. Using a sysimage can
   vastly reduce the time it takes to format files.)
-
-The following features require the latest version of `JuliaFormatter.jl`:
-
-- `juliaFormatter.overwriteFlags`: If `true`, accepts flag values passed from
-  vs-code interface rather than default values of specified style. See [this
-  issue](https://github.com/singularitti/vscode-julia-formatter/issues/32) for
-  more details.
-- `juliaFormatter.whitespaceInKwargs`: If `true`, `=` in keyword arguments will
-  be surrounded by whitespace.
-- `juliaFormatter.formatDocstrings`: Format code docstrings with the same
-  options used for the code source.
-- `juliaFormatter.alignStructField`: If `true`, align struct field definitions
-  to `::` or `=`, whichever has higher precedence.
-- `juliaFormatter.alignConditional`: If `true`, align conditional expressions to
-  either `?`, `:`, or both.
-- `juliaFormatter.alignAssignment`: If `true`, align an assignment expression.
-- `juliaFormatter.alignPairArrow`: If `true`, align pair arrows `(=>)`.
-- `juliaFormatter.conditionalToIf`: If the conditional `E ? A : B` exceeds the
-  maximum margin converts it into the equivalent `if` block.
-- `juliaFormatter.normalizeLineEndings`: Normalize line endings.
 
 For more detailed explanation of these settings, please go to
 [its official docs](https://domluna.github.io/JuliaFormatter.jl/stable/).
