@@ -15,7 +15,6 @@ let progressBar: vscode.StatusBarItem;
 
 let outputChannel = vscode.window.createOutputChannel("Julia Formatter");
 outputChannel.show();
-outputChannel.appendLine("Initializing Julia Formatter extension");
 
 export async function getJulia(): Promise<string> {
 	// From https://github.com/julia-vscode/julia-vscode/blob/dd94db5/src/settings.ts#L8-L14
@@ -218,19 +217,18 @@ export async function format(path: string, content: string): Promise<diff.Hunk[]
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L159-L180
 export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
 	return hunks.map((hunk): vscode.TextEdit => {
-		const nLines = hunk.lines.length;
 		const startPos = new vscode.Position(hunk.oldStart - 1, 0);
 		const endPos = new vscode.Position(hunk.oldStart - 1 + hunk.oldLines, 0);
 		const editRange = new vscode.Range(startPos, endPos);
 
 		const newTextFragments: string[] = [];
-		for (let i = 0; i < nLines; i++) {
-			const line = hunk.lines[i];
+		hunk.lines.forEach((line, i) => {
 			const firstChar = line.charAt(0);
 			if (firstChar === " " || firstChar === "+") {
-				newTextFragments.push(line.substr(1), hunk.linedelimiters[i]);
+				// hunk.linedelimiters[i] should always exist, but you never know
+				newTextFragments.push(line.substr(1), hunk.linedelimiters[i] ?? "\n");
 			}
-		}
+		});
 		const newText = newTextFragments.join("");
 
 		return vscode.TextEdit.replace(editRange, newText);
@@ -239,12 +237,14 @@ export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
 
 export function activate(context: vscode.ExtensionContext) {
 	vscode.languages.registerDocumentFormattingEditProvider("julia", {
-		provideDocumentFormattingEdits(
+		async provideDocumentFormattingEdits(
 			document: vscode.TextDocument,
 		): Promise<vscode.TextEdit[]> {
-			return format(document.fileName, document.getText()).then(hunksToEdits);
+			const hunks = await format(document.fileName, document.getText());
+			return hunksToEdits(hunks);
 		},
 	});
+	outputChannel.appendLine("Initialized Julia Formatter extension");
 }
 
 export interface FormatException {
