@@ -64,7 +64,7 @@ export async function buildFormatArgs(): Promise<string[]> {
     const compile = settings.get<string>("compile") as string;
     const margin = settings.get<number>("margin") as number;
     const indent = settings.get<number>("indent") as number;
-    const normalizeLineEndings = settings.get<string>("normalize_line_endings") as string;
+    const normalizeLineEndings = settings.get<string>("normalizeLineEndings") as string;
 
     const formattingFlagsKeyMap = {
         alwaysForIn: "always_for_in",
@@ -101,7 +101,7 @@ export async function buildFormatArgs(): Promise<string[]> {
         `style = ${style}`,
         `indent = ${indent}`,
         `margin = ${margin}`,
-        `normalize_line_endings = ${normalizeLineEndings}`,
+        `normalize_line_endings = "${normalizeLineEndings}"`,
         ...(overwriteFlags
             ? Object.entries(formattingFlagsKeyMap).map(([jsKey, juliaKwarg]) => {
                 // All flags have defaults set in package.json, so this can't return undefined
