@@ -12,7 +12,7 @@
     "url": "https://github.com/singularitti/vscode-julia-formatter/issues"
   },
   "description": "A formatter for the Julia language",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "engines": {
     "vscode": "^1.40.0"
   },
@@ -110,7 +110,7 @@
         "juliaFormatter.annotateUntypedFieldsWithAny": {
           "type": "boolean",
           "default": true,
-          "description": "If `true`, Annotates fields in a type definitions with `::Any` if no type annotation is provided (Requires `JuliaFormatter.jl v0.6.3`)."
+          "description": "If `true`, annotates fields in a type definitions with `::Any` if no type annotation is provided (Requires `JuliaFormatter.jl v0.6.3`)."
         },
         "juliaFormatter.whitespaceInKwargs": {
           "type": "boolean",
@@ -120,7 +120,7 @@
         "juliaFormatter.formatDocstrings": {
           "type": "boolean",
           "default": false,
-          "description": "Format code docstrings with the same options used for the code source."
+          "description": "If `true`, format code docstrings with the same options used for the code source."
         },
         "juliaFormatter.alignStructField": {
           "type": "boolean",
@@ -135,12 +135,12 @@
         "juliaFormatter.alignAssignment": {
           "type": "boolean",
           "default": false,
-          "description": "If `true`, align an assignment expression."
+          "description": "If `true`, align the `=`-like operators. This covers variable assignments and short definition functions."
         },
         "juliaFormatter.alignPairArrow": {
           "type": "boolean",
           "default": false,
-          "description": "If `true`, align pair arrows `(=>)`."
+          "description": "If `true`, align pair arrows (`=>`)."
         },
         "juliaFormatter.conditionalToIf": {
           "type": "boolean",
@@ -156,13 +156,22 @@
             "windows"
           ],
           "description": "Normalize line endings."
+        },
+        "juliaFormatter.sysimagePath": {
+          "default": "",
+          "description": "The Julia system image to use with Julia's `--sysimage` argument. If left blank, no system image will be used.",
+          "type": "string"
         }
       }
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
+    "vscode:prepublish": "npm run -S esbuild-base -- --minify",
     "compile": "tsc -p ./",
+    "test-compile": "tsc -p ./",
+    "esbuild": "npm run -S esbuild-base -- --sourcemap",
+    "esbuild-base": "esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
+    "esbuild-watch": "npm run -S esbuild-base -- --sourcemap --watch",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "test": "node ./out/test/runTest.js"
@@ -173,6 +182,7 @@
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.11.7",
     "@types/vscode": "^1.40.0",
+    "esbuild": "^0.12.5",
     "glob": "^7.1.5",
     "mocha": "^6.2.2",
     "tslint": "^5.20.0",
