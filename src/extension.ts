@@ -15,46 +15,45 @@ let progressBar: vscode.StatusBarItem;
 
 let outputChannel = vscode.window.createOutputChannel("Julia Formatter");
 outputChannel.show();
-outputChannel.appendLine("Initializing Julia Formatter extension");
 
 export async function getJulia(): Promise<string> {
-    // From https://github.com/julia-vscode/julia-vscode/blob/dd94db5/src/settings.ts#L8-L14
-    let section = vscode.workspace.getConfiguration("julia");
-    let jlpath = section
-        ? untildify(section.get<string>("executablePath", "julia"))
-        : null;
-    if (jlpath === "") {
-        jlpath = null;
-    }
-    // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L15-L45
-    if (jlpath !== null) {
-        try {
-            await promiseExec(`"${jlpath}" --version`);
-            return jlpath;
-        } catch (err) {
-            vscode.window.showErrorMessage(`
+	// From https://github.com/julia-vscode/julia-vscode/blob/dd94db5/src/settings.ts#L8-L14
+	let section = vscode.workspace.getConfiguration("julia");
+	let jlpath = section
+		? untildify(section.get<string>("executablePath", "julia"))
+		: null;
+	if (jlpath === "") {
+		jlpath = null;
+	}
+	// From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L15-L45
+	if (jlpath !== null) {
+		try {
+			await promiseExec(`"${jlpath}" --version`);
+			return jlpath;
+		} catch (err) {
+			vscode.window.showErrorMessage(`
 		  The Julia path set in the "julia.executablePath" setting is invalid. Check
 		  the value or clear the setting to use the global Julia installation.
 		`);
-            throw err;
-        }
-    }
-    try {
-        await promiseExec("julia --version");
-        return "julia";
-    } catch {
-        try {
-            await promiseExec("jl --version");
-            return "jl";
-        } catch (err) {
-            vscode.window.showErrorMessage(`
+			throw err;
+		}
+	}
+	try {
+		await promiseExec("julia --version");
+		return "julia";
+	} catch {
+		try {
+			await promiseExec("jl --version");
+			return "jl";
+		} catch (err) {
+			vscode.window.showErrorMessage(`
 		  Julia is either not installed or not properly configured. Check that
 		  the Julia location is set in VSCode or provided in the system
 		  environment variables.
 		`);
-            throw err;
-        }
-    }
+			throw err;
+		}
+	}
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L54-L72
@@ -138,123 +137,123 @@ export async function buildFormatArgs(): Promise<string[]> {
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L78-L90
 export async function installDocformatter(): Promise<void> {
-    const julia = await getJulia();
-    try {
-        await promiseExec(`${julia} -e "using Pkg; Pkg.update(); Pkg.add(\\\"JuliaFormatter\\\")"`);
-    } catch (err) {
-        vscode.window.showErrorMessage(`
+	const julia = await getJulia();
+	try {
+		await promiseExec(
+			`${julia} -e "using Pkg; Pkg.update(); Pkg.add(\\\"JuliaFormatter\\\")"`,
+		);
+	} catch (err) {
+		vscode.window.showErrorMessage(`
 		Could not install JuliaFormatter automatically. Make sure that it
 		is installed correctly and try manually installing with
 		'julia -e \"using Pkg; Pkg.add(\\\"JuliaFormatter\\\")\". \n\n Full error: ${err}'.
 	  `);
-        throw err;
-    }
+		throw err;
+	}
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L101-L132
-export async function alertFormattingError(
-    err: FormatException
-): Promise<void> {
-    if (
-        err.message.includes("Package JuliaFormatter not found")
-    ) {
-        const installButton = "Install Module";
-        const response = await vscode.window.showErrorMessage(
-            `The Julia package 'JuliaFormatter' must be installed to format files.`,
-            installButton
-        );
-        if (response === installButton) {
-            installDocformatter();
-        }
-    } else {
-        const bugReportButton = "Submit Bug Report";
-        const response = await vscode.window.showErrorMessage(
-            `Unknown Error: Could not format file. Full error:\n\n
+export async function alertFormattingError(err: FormatException): Promise<void> {
+	if (err.message.includes("Package JuliaFormatter not found")) {
+		const installButton = "Install Module";
+		const response = await vscode.window.showErrorMessage(
+			`The Julia package 'JuliaFormatter' must be installed to format files.`,
+			installButton,
+		);
+		if (response === installButton) {
+			installDocformatter();
+		}
+	} else {
+		const bugReportButton = "Submit Bug Report";
+		const response = await vscode.window.showErrorMessage(
+			`Unknown Error: Could not format file. Full error:\n\n
 		  ${err.message}`,
-            bugReportButton
-        );
-        if (response === bugReportButton) {
-            vscode.commands.executeCommand(
-                "vscode.open",
-                vscode.Uri.parse(
-                    "https://github.com/singularitti/vscode-julia-formatter/issues/new"
-                )
-            );
-        }
-    }
+			bugReportButton,
+		);
+		if (response === bugReportButton) {
+			vscode.commands.executeCommand(
+				"vscode.open",
+				vscode.Uri.parse(
+					"https://github.com/singularitti/vscode-julia-formatter/issues/new",
+				),
+			);
+		}
+	}
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L142-L152
 export async function format(path: string, content: string): Promise<diff.Hunk[]> {
-    const julia = await getJulia();
-    const args: string[] = await buildFormatArgs();
-    try {
-        progressBar = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, -1);
-        progressBar.text = "Formatting...";
-        progressBar.show();
-        const juliaFormatter = cp.spawn(julia, args);
+	const julia = await getJulia();
+	const args: string[] = await buildFormatArgs();
+	try {
+		progressBar = vscode.window.createStatusBarItem(
+			vscode.StatusBarAlignment.Left,
+			-1,
+		);
+		progressBar.text = "Formatting...";
+		progressBar.show();
+		const juliaFormatter = cp.spawn(julia, args);
 
-        await streamWrite(juliaFormatter.stdin, content);
-        await streamEnd(juliaFormatter.stdin);
+		await streamWrite(juliaFormatter.stdin, content);
+		await streamEnd(juliaFormatter.stdin);
 
-        const formattedContent = await readableToString(juliaFormatter.stdout);
+		const formattedContent = await readableToString(juliaFormatter.stdout);
 
-        // TODO: capture stderr output from JuliaFormatter on error
-        await onExit(juliaFormatter);
+		// TODO: capture stderr output from JuliaFormatter on error
+		await onExit(juliaFormatter);
 
-        // It would be nicer if we could combine these two lines somehow
-        const patch = diff.createPatch(path, content, formattedContent);
-        const parsed: diff.ParsedDiff[] = diff.parsePatch(patch);
-        return parsed[0].hunks;
-    } catch (err) {
-        alertFormattingError(err);
-        throw err;
-    } finally {
-        progressBar.dispose();
-    }
+		// It would be nicer if we could combine these two lines somehow
+		const patch = diff.createPatch(path, content, formattedContent);
+		const parsed: diff.ParsedDiff[] = diff.parsePatch(patch);
+		return parsed[0].hunks;
+	} catch (err) {
+		alertFormattingError(err);
+		throw err;
+	} finally {
+		progressBar.hide();
+	}
 }
-
-
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L159-L180
 export function hunksToEdits(hunks: diff.Hunk[]): vscode.TextEdit[] {
-    return hunks.map(
-        (hunk): vscode.TextEdit => {
-            const startPos = new vscode.Position(hunk.newStart - 1, 0);
-            const endPos = new vscode.Position(
-                hunk.newStart - 1 + hunk.oldLines - 1,
-                hunk.lines[hunk.lines.length - 1].length - 1
-            );
-            const editRange = new vscode.Range(startPos, endPos);
+	return hunks.map((hunk): vscode.TextEdit => {
+		const startPos = new vscode.Position(hunk.oldStart - 1, 0);
+		const endPos = new vscode.Position(hunk.oldStart - 1 + hunk.oldLines, 0);
+		const editRange = new vscode.Range(startPos, endPos);
 
-            const newTextLines = hunk.lines
-                .filter(
-                    (line): boolean => line.charAt(0) === " " || line.charAt(0) === "+"
-                )
-                .map((line): string => line.substr(1));
-            const lineEndChar: string = hunk.linedelimiters[0];
-            const newText = newTextLines.join(lineEndChar);
+		const newTextFragments: string[] = [];
+		hunk.lines.forEach((line, i) => {
+			const firstChar = line.charAt(0);
+			if (firstChar === " " || firstChar === "+") {
+				// hunk.linedelimiters[i] should always exist, but you never know
+				newTextFragments.push(line.substr(1), hunk.linedelimiters[i] ?? "\n");
+			}
+		});
+		const newText = newTextFragments.join("");
 
-            return new vscode.TextEdit(editRange, newText);
-        }
-    );
+		return vscode.TextEdit.replace(editRange, newText);
+	});
 }
 
 export function activate(context: vscode.ExtensionContext) {
-    vscode.languages.registerDocumentFormattingEditProvider('julia', {
-        provideDocumentFormattingEdits(document: vscode.TextDocument): Promise<vscode.TextEdit[]> {
-            return format(document.fileName, document.getText()).then(hunksToEdits);
-        }
-    });
+	vscode.languages.registerDocumentFormattingEditProvider("julia", {
+		async provideDocumentFormattingEdits(
+			document: vscode.TextDocument,
+		): Promise<vscode.TextEdit[]> {
+			const hunks = await format(document.fileName, document.getText());
+			return hunksToEdits(hunks);
+		},
+	});
+	outputChannel.appendLine("Initialized Julia Formatter extension");
 }
 
 export interface FormatException {
-    message: string;
+	message: string;
 }
 
 // this method is called when your extension is deactivated
 export function deactivate(): void {
-    if (registration) {
-        registration.dispose();
-    }
+	if (registration) {
+		registration.dispose();
+	}
 }
