@@ -52,3 +52,13 @@ Thanks to @friggog in #10
 ### 0.4.0
 
 - Merge #30 & #31: adding `BlueStyle` option
+
+### 0.5.0
+
+- Closes #32, merge #33: Add overwrite flags
+- Merge #37: Add the latest formatting options
+
+### 0.5.1
+
+- Try to fix #28 "Formatter breaks code" in #40 "Fixed bug where formatting corrupted files, added option for Julia sys image, and cleaned up code."
+- Merge #42: Add back args that was removed in PR #40
