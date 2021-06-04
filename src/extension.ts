@@ -12,8 +12,8 @@ export const promiseExec = util.promisify(cp.exec);
 export let registration: vscode.Disposable | undefined;
 
 const progressBar: vscode.StatusBarItem = vscode.window.createStatusBarItem(
-	vscode.StatusBarAlignment.Left,
-	-1,
+    vscode.StatusBarAlignment.Left,
+    -1,
 );
 progressBar.text = "Formatting...";
 
@@ -190,13 +190,13 @@ export async function alertFormattingError(err: FormatException): Promise<void> 
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L142-L152
 export async function format(path: string, content: string): Promise<diff.Hunk[]> {
-	const julia = await getJulia();
-	const args: string[] = await buildFormatArgs();
+    const julia = await getJulia();
+    const args: string[] = await buildFormatArgs();
 
-	progressBar.show();
+    progressBar.show();
 
-	try {
-		const juliaFormatter = cp.spawn(julia, args);
+    try {
+        const juliaFormatter = cp.spawn(julia, args);
 
         await streamWrite(juliaFormatter.stdin, content);
         await streamEnd(juliaFormatter.stdin);
