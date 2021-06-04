@@ -62,3 +62,7 @@ Thanks to @friggog in #10
 
 - Try to fix #28 "Formatter breaks code" in #40 "Fixed bug where formatting corrupted files, added option for Julia sys image, and cleaned up code."
 - Merge #42: Add back args that was removed in PR #40
+
+### 0.5.2
+
+- Merge #44: Fixed bug where formatting twice in quick succession would cause duplicate "Formatting..." status bar items
