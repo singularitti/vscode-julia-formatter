@@ -11,7 +11,11 @@ import { onExit } from "./on-exit";
 export const promiseExec = util.promisify(cp.exec);
 export let registration: vscode.Disposable | undefined;
 
-let progressBar: vscode.StatusBarItem;
+const progressBar: vscode.StatusBarItem = vscode.window.createStatusBarItem(
+	vscode.StatusBarAlignment.Left,
+	-1,
+);
+progressBar.text = "Formatting...";
 
 let outputChannel = vscode.window.createOutputChannel("Julia Formatter");
 outputChannel.show();
@@ -185,13 +189,10 @@ export async function alertFormattingError(err: FormatException): Promise<void> 
 export async function format(path: string, content: string): Promise<diff.Hunk[]> {
 	const julia = await getJulia();
 	const args: string[] = await buildFormatArgs();
+
+	progressBar.show();
+
 	try {
-		progressBar = vscode.window.createStatusBarItem(
-			vscode.StatusBarAlignment.Left,
-			-1,
-		);
-		progressBar.text = "Formatting...";
-		progressBar.show();
 		const juliaFormatter = cp.spawn(julia, args);
 
 		await streamWrite(juliaFormatter.stdin, content);
