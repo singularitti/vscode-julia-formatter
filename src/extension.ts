@@ -129,8 +129,11 @@ export async function buildFormatArgs(): Promise<string[]> {
         "-e",
         `using JuliaFormatter
 
+        const file_contents = read(stdin, String)
+        Meta.parse(file_contents)
+
         function format_stdin()
-            print(format_text(String(read(stdin)); ${options}))
+            print(format_text(file_contents; ${options}))
         end
 
         format_stdin()
@@ -160,7 +163,12 @@ export async function installDocformatter(): Promise<void> {
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L101-L132
-export async function alertFormattingError(err: FormatException): Promise<void> {
+export async function alertFormattingError(
+    err: FormatException,
+    path: string,
+): Promise<void> {
+    outputChannel.appendLine(err.message);
+
     if (err.message.includes("Package JuliaFormatter not found")) {
         const installButton = "Install Module";
         const response = await vscode.window.showErrorMessage(
@@ -172,9 +180,18 @@ export async function alertFormattingError(err: FormatException): Promise<void> 
         }
     } else {
         const bugReportButton = "Submit Bug Report";
+        const err_header_match = err.message.match(/^(ERROR:.*)/m);
+        const err_body =
+            err_header_match !== null
+                ? [
+                    err_header_match[1],
+                    `Occurred in file: ${vscode.workspace.asRelativePath(path)}`,
+                    "Full error text has been logged to VSCode's output window",
+                ].join(". ") // Unfortunately, VSCode's error window doesn't render newlines
+                : `Unknown Error: Could not format file. Full error:\n\n${err.message}`;
+
         const response = await vscode.window.showErrorMessage(
-            `Unknown Error: Could not format file. Full error:\n\n
-          ${err.message}`,
+            err_body,
             bugReportButton,
         );
         if (response === bugReportButton) {
@@ -211,7 +228,7 @@ export async function format(path: string, content: string): Promise<diff.Hunk[]
         const parsed: diff.ParsedDiff[] = diff.parsePatch(patch);
         return parsed[0].hunks;
     } catch (err) {
-        alertFormattingError(err);
+        alertFormattingError(err, path);
         throw err;
     } finally {
         progressBar.hide();
