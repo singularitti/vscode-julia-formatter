@@ -66,3 +66,7 @@ Thanks to @friggog in #10
 ### 0.5.2
 
 - Merge #44: Fixed bug where formatting twice in quick succession would cause duplicate "Formatting..." status bar items
+
+### 0.6.0
+
+- Merge #45: Simplified error message when file contains syntax errors
