@@ -130,7 +130,7 @@ export async function buildFormatArgs(): Promise<string[]> {
         `using JuliaFormatter
 
         const file_contents = read(stdin, String)
-        Meta.parse(file_contents)
+        Meta.parseall(file_contents)
 
         function format_stdin()
             print(format_text(file_contents; ${options}))
