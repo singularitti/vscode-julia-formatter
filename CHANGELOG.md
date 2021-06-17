@@ -70,3 +70,7 @@ Thanks to @friggog in #10
 ### 0.6.0
 
 - Merge #45: Simplified error message when file contains syntax errors
+
+### 0.6.1
+
+- Merge #46 & #47: Hotfix where multiple statements outside a module would cause formatting to fail
