@@ -108,12 +108,12 @@ export async function buildFormatArgs(): Promise<string[]> {
         `normalize_line_endings = "${normalizeLineEndings}"`,
         ...(overwriteFlags
             ? Object.entries(formattingFlagsKeyMap).map(([jsKey, juliaKwarg]) => {
-                    // All flags have defaults set in package.json, so this can't return undefined
-                    const value = settings.get<boolean>(jsKey) as boolean;
+                // All flags have defaults set in package.json, so this can't return undefined
+                const value = settings.get<boolean>(jsKey) as boolean;
 
-                    // JS and Julia use the same representation for `true` and `false`
-                    return `${juliaKwarg} = ${value}`;
-              })
+                // JS and Julia use the same representation for `true` and `false`
+                return `${juliaKwarg} = ${value}`;
+            })
             : []),
     ];
 
@@ -184,10 +184,10 @@ export async function alertFormattingError(
         const err_body =
             err_header_match !== null
                 ? [
-                        err_header_match[1],
-                        `Occurred in file: ${vscode.workspace.asRelativePath(path)}`,
-                        "Full error text has been logged to VSCode's output window",
-                  ].join(". ") // Unfortunately, VSCode's error window doesn't render newlines
+                    err_header_match[1],
+                    `Occurred in file: ${vscode.workspace.asRelativePath(path)}`,
+                    "Full error text has been logged to VSCode's output window",
+                ].join(". ") // Unfortunately, VSCode's error window doesn't render newlines
                 : `Unknown Error: Could not format file. Full error:\n\n${err.message}`;
 
         const response = await vscode.window.showErrorMessage(
