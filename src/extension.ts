@@ -61,7 +61,7 @@ export async function getJulia(): Promise<string> {
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L54-L72
-export async function buildFormatArgs(): Promise<string[]> {
+export async function buildFormatArgs(path: string): Promise<string[]> {
     const settings = vscode.workspace.getConfiguration("juliaFormatter");
 
     const overwriteFlags = settings.get<boolean>("overwriteFlags") as boolean;
@@ -129,8 +129,26 @@ export async function buildFormatArgs(): Promise<string[]> {
         "-e",
         `using JuliaFormatter
 
+        function throw_if_parse_err(ex)
+            ex.head !== :toplevel && return
+            for (i, arg) in pairs(ex.args)
+                !(arg isa Expr && (arg.head === :error || arg.head === :incomplete)) && continue
+                line_node = ex.args[i-1]
+                line = line_node.line
+                file = line_node.file
+                msg = join(arg.args, ", ")
+                throw(Meta.ParseError(
+                    replace("Error in line $line of $file: $msg", "\\"" => '\`')
+                    )
+                )
+            end
+        end
+
         const file_contents = read(stdin, String)
-        Meta.parseall(file_contents)
+        const ex = Meta.parseall(file_contents;
+            filename="${vscode.workspace.asRelativePath(path)}"
+            )
+        throw_if_parse_err(ex)
 
         function format_stdin()
             print(format_text(file_contents; ${options}))
@@ -163,10 +181,7 @@ export async function installDocformatter(): Promise<void> {
 }
 
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L101-L132
-export async function alertFormattingError(
-    err: FormatException,
-    path: string,
-): Promise<void> {
+export async function alertFormattingError(err: FormatException): Promise<void> {
     outputChannel.appendLine(err.message);
 
     if (err.message.includes("Package JuliaFormatter not found")) {
@@ -183,11 +198,7 @@ export async function alertFormattingError(
         const err_header_match = err.message.match(/^(ERROR:.*)/m);
         const err_body =
             err_header_match !== null
-                ? [
-                    err_header_match[1],
-                    `Occurred in file: ${vscode.workspace.asRelativePath(path)}`,
-                    "Full error text has been logged to VSCode's output window",
-                ].join(". ") // Unfortunately, VSCode's error window doesn't render newlines
+                ? err_header_match[1]
                 : `Unknown Error: Could not format file. Full error:\n\n${err.message}`;
 
         const response = await vscode.window.showErrorMessage(
@@ -208,7 +219,7 @@ export async function alertFormattingError(
 // From https://github.com/iansan5653/vscode-format-python-docstrings/blob/0135de8/src/extension.ts#L142-L152
 export async function format(path: string, content: string): Promise<diff.Hunk[]> {
     const julia = await getJulia();
-    const args: string[] = await buildFormatArgs();
+    const args: string[] = await buildFormatArgs(path);
 
     progressBar.show();
 
@@ -228,7 +239,7 @@ export async function format(path: string, content: string): Promise<diff.Hunk[]
         const parsed: diff.ParsedDiff[] = diff.parsePatch(patch);
         return parsed[0].hunks;
     } catch (err) {
-        alertFormattingError(err, path);
+        alertFormattingError(err);
         throw err;
     } finally {
         progressBar.hide();
