@@ -74,3 +74,7 @@ Thanks to @friggog in #10
 ### 0.6.1
 
 - Merge #46 & #47: Hotfix where multiple statements outside a module would cause formatting to fail
+
+### 0.6.2
+
+- Merge #48: Better error messages when file doesn't parse
