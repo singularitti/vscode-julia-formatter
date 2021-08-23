@@ -78,3 +78,7 @@ Thanks to @friggog in #10
 ### 0.6.2
 
 - Merge #48: Better error messages when file doesn't parse
+
+### 0.6.3
+
+- Merge #52: Don't open `outputChannel` every time
