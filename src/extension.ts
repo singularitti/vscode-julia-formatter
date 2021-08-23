@@ -18,7 +18,6 @@ const progressBar: vscode.StatusBarItem = vscode.window.createStatusBarItem(
 progressBar.text = "Formatting...";
 
 let outputChannel = vscode.window.createOutputChannel("Julia Formatter");
-outputChannel.show();
 
 export async function getJulia(): Promise<string> {
     // From https://github.com/julia-vscode/julia-vscode/blob/dd94db5/src/settings.ts#L8-L14
