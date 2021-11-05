@@ -2,6 +2,9 @@
 
 [![Build Status](https://dev.azure.com/singularitti/vscode-julia-formatter/_apis/build/status/singularitti.vscode-julia-formatter?branchName=master)](https://dev.azure.com/singularitti/vscode-julia-formatter/_build/latest?definitionId=1&branchName=master)
 
+**Note**: The [latest (1.5.0+) julia-vscode plugin](https://github.com/julia-vscode/julia-vscode) already supports `JuliaFormatter.jl` as its default formatter.
+This plugin will be deprecated.
+
 ## Features
 
 This is a [Julia language](https://julialang.org/) formatter using the
