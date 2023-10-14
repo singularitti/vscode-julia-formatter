@@ -4,7 +4,7 @@
 
 ## Note
 The [latest (1.5.0+) julia-vscode plugin](https://github.com/julia-vscode/julia-vscode) already supports `JuliaFormatter.jl` as its default formatter.
-This plugin will be deprecated.
+This plugin will be deprecated. If you want to continue using some of its features, have a look at [0h7z/vscode-julia-format](https://github.com/0h7z/vscode-julia-format).
 
 ## Features
 
