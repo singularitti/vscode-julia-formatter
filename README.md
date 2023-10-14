@@ -120,3 +120,7 @@ See [CHANGELOG.md](./CHANGELOG.md) for release notes.
 I extend my heartfelt gratitude to the
 [Python Docstring Formatter Extension](https://github.com/iansan5653/vscode-format-python-docstrings/)
 which has significantly inspired the development of this extension.
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=singularitti/vscode-julia-formatter&type=Date)](https://star-history.com/#singularitti/vscode-julia-formatter&Date)
