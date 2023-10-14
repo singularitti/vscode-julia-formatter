@@ -1,4 +1,4 @@
-# [DEPRECATED] Julia Formatter Extension
+# [ARCHIVED] Julia Formatter Extension
 
 [![Build Status](https://dev.azure.com/singularitti/vscode-julia-formatter/_apis/build/status/singularitti.vscode-julia-formatter?branchName=master)](https://dev.azure.com/singularitti/vscode-julia-formatter/_build/latest?definitionId=1&branchName=master)
 
@@ -114,3 +114,9 @@ in the editor's `settings.json`.
 ## Release Notes
 
 See [CHANGELOG.md](./CHANGELOG.md) for release notes.
+
+## Acknowledgment
+
+I extend my heartfelt gratitude to the
+[Python Docstring Formatter Extension](https://github.com/iansan5653/vscode-format-python-docstrings/)
+which has significantly inspired the development of this extension.
